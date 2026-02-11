@@ -1,197 +1,626 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const WebDevelopment = () => {
+  const [hoveredService, setHoveredService] = useState(null);
+  const [hoveredTech, setHoveredTech] = useState(null);
+
+  // Animation variants
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 60 },
+    visible: { opacity: 1, y: 0 }
+  };
+
+  const fadeInLeft = {
+    hidden: { opacity: 0, x: -60 },
+    visible: { opacity: 1, x: 0 }
+  };
+
+  const fadeInRight = {
+    hidden: { opacity: 0, x: 60 },
+    visible: { opacity: 1, x: 0 }
+  };
+
+  const scaleIn = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1 }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+
   return (
-    <section className="py-24 px-6 bg-gray-50">
+    <div className="bg-gradient-to-b from-gray-50 via-white to-gray-50 overflow-hidden">
+      
+      {/* Hero Section with Gradient Background */}
+      <section className="relative py-32 px-6 overflow-hidden">
+        {/* Animated background elements */}
+        <motion.div 
+          className="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <motion.div 
+          className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl"
+          animate={{ 
+            scale: [1.2, 1, 1.2],
+            opacity: [0.5, 0.3, 0.5]
+          }}
+          transition={{ duration: 10, repeat: Infinity }}
+        />
 
-      {/* Intro Section */}
-      <div className="max-w-6xl mx-auto text-center mb-20">
-        <motion.h1 
-          className="text-5xl sm:text-6xl font-bold mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          Web <span className="text-blue-600">Development</span>
-        </motion.h1>
-        <motion.p
-          className="text-xl sm:text-2xl text-gray-600 mb-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          We craft high-performance, responsive websites and SaaS platforms using modern technologies like React, Next.js, and Node.js.
-        </motion.p>
-      </div>
-
-      {/* Services / What We Do */}
-      <div className="max-w-5xl mx-auto mb-24 grid md:grid-cols-2 gap-10">
-        {[
-          {
-            title: "Frontend Development",
-            description: "Responsive, interactive, and pixel-perfect UI using React.js, Next.js, TailwindCSS, and modern JS frameworks.",
-            icon: "🖥️"
-          },
-          {
-            title: "Backend & APIs",
-            description: "Build secure, scalable, and fast backend systems with Node.js, Express, and REST/GraphQL APIs.",
-            icon: "🔧"
-          },
-          {
-            title: "Fullstack SaaS Platforms",
-            description: "End-to-end SaaS solutions from database to UI, optimized for performance, SEO, and scalability.",
-            icon: "⚡"
-          },
-          {
-            title: "CMS & E-commerce",
-            description: "Custom CMS and e-commerce platforms for businesses to manage content, products, and users efficiently.",
-            icon: "🛒"
-          }
-        ].map((service, i) => (
+        <div className="max-w-6xl mx-auto text-center relative z-10">
           <motion.div
-            key={i}
-            className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-shadow"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.2, duration: 0.6 }}
+            variants={fadeInUp}
+            initial="hidden"
+            animate="visible"
+            transition={{ duration: 0.8 }}
           >
-            <div className="text-4xl mb-4">{service.icon}</div>
-            <h3 className="text-2xl font-bold mb-2">{service.title}</h3>
-            <p className="text-gray-600">{service.description}</p>
+            <motion.h1 
+              className="text-6xl sm:text-7xl lg:text-8xl font-extrabold mb-6 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-700 bg-clip-text text-transparent"
+              animate={{ 
+                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
+              }}
+              transition={{ duration: 5, repeat: Infinity }}
+              style={{ backgroundSize: "200% auto" }}
+            >
+              Web Development
+            </motion.h1>
           </motion.div>
-        ))}
-      </div>
 
-      {/* Tech Stack */}
-      <div className="max-w-6xl mx-auto mb-24 text-center">
-        <motion.h2 
-          className="text-4xl font-bold mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          Tech <span className="text-blue-600">Stack</span>
-        </motion.h2>
-        <div className="flex flex-wrap justify-center gap-6">
-          {["React", "Next.js", "Node.js", "Express", "TailwindCSS", "MongoDB", "PostgreSQL", "GraphQL"].map((tech, i) => (
-            <motion.div
-              key={i}
-              className="bg-white/90 backdrop-blur-md rounded-xl px-6 py-3 font-semibold shadow-md hover:scale-105 transition-transform cursor-default"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
+          <motion.p
+            className="text-xl sm:text-2xl lg:text-3xl text-gray-700 mb-12 max-w-4xl mx-auto font-light leading-relaxed"
+            variants={fadeInUp}
+            initial="hidden"
+            animate="visible"
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            Transforming ideas into stunning digital experiences with cutting-edge technology
+          </motion.p>
+
+          <motion.div
+            className="flex flex-wrap gap-6 justify-center items-center"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.a
+              href="/contact"
+              className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-blue-500/50 transition-all"
+              variants={scaleIn}
+              whileHover={{ scale: 1.05, y: -5 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {tech}
-            </motion.div>
-          ))}
+              Start Your Project
+            </motion.a>
+            <motion.a
+              href="#portfolio"
+              className="bg-white text-blue-600 px-10 py-5 rounded-2xl font-bold text-lg shadow-xl border-2 border-blue-600 hover:bg-blue-50 transition-all"
+              variants={scaleIn}
+              whileHover={{ scale: 1.05, y: -5 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              View Our Work
+            </motion.a>
+          </motion.div>
         </div>
-      </div>
+      </section>
 
-      {/* How We Work */}
-      <div className="max-w-5xl mx-auto mb-24">
-        <motion.h2
-          className="text-4xl font-bold text-center mb-12"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+      {/* Statistics Section */}
+      <section className="py-20 px-6 bg-gradient-to-r from-blue-600 to-cyan-500">
+        <motion.div 
+          className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
         >
-          How We Work
-        </motion.h2>
-        <div className="space-y-10">
           {[
-            { step: "1", title: "Discovery & Planning", desc: "We understand your business, goals, and audience to plan the perfect web solution." },
-            { step: "2", title: "UI/UX Design", desc: "Creating intuitive and modern interfaces that engage users and convert visitors." },
-            { step: "3", title: "Development & Testing", desc: "High-quality, responsive websites with clean code, tested on all devices." },
-            { step: "4", title: "Launch & Optimization", desc: "Deploy, monitor performance, and continuously improve SEO, speed, and usability." },
-          ].map((item, i) => (
+            { number: "500+", label: "Projects Completed" },
+            { number: "98%", label: "Client Satisfaction" },
+            { number: "50+", label: "Expert Developers" },
+            { number: "24/7", label: "Support Available" }
+          ].map((stat, i) => (
             <motion.div
               key={i}
-              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-shadow"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.2, duration: 0.6 }}
+              className="text-center text-white"
+              variants={scaleIn}
             >
-              <div className="text-blue-600 font-bold text-xl mb-2">Step {item.step}</div>
-              <h3 className="text-2xl font-semibold mb-2">{item.title}</h3>
-              <p className="text-gray-600">{item.desc}</p>
+              <motion.h3 
+                className="text-5xl md:text-6xl font-bold mb-2"
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+              >
+                {stat.number}
+              </motion.h3>
+              <p className="text-blue-100 text-lg font-medium">{stat.label}</p>
             </motion.div>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </section>
 
-      {/* Benefits Section */}
-      <div className="max-w-6xl mx-auto mb-24 text-center">
-        <motion.h2 
-          className="text-4xl font-bold mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          Why Choose <span className="text-blue-600">Us</span>
-        </motion.h2>
-        <div className="grid md:grid-cols-3 gap-10">
-          {[
-            { title: "High Performance", icon: "⚡" },
-            { title: "SEO Friendly", icon: "🔍" },
-            { title: "Scalable Solutions", icon: "📈" },
-            { title: "Secure Code", icon: "🔒" },
-            { title: "Responsive Design", icon: "📱" },
-            { title: "Fast Delivery", icon: "⏱️" },
-          ].map((benefit, i) => (
-            <motion.div
-              key={i}
-              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-shadow flex flex-col items-center justify-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
+      {/* Services Section - Enhanced */}
+      <section className="py-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            className="text-center mb-20"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-5xl sm:text-6xl font-bold mb-6">
+              Our <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">Services</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Comprehensive web development solutions tailored to your business needs
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="grid md:grid-cols-2 gap-8"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {[
+              {
+                title: "Frontend Development",
+                description: "Crafting beautiful, responsive interfaces with React, Next.js, and modern CSS frameworks. Every pixel perfect, every interaction smooth.",
+                icon: "🎨",
+                gradient: "from-purple-500 to-pink-500"
+              },
+              {
+                title: "Backend & APIs",
+                description: "Robust, scalable server architecture with Node.js, Express, and database optimization. Security and performance built-in.",
+                icon: "⚙️",
+                gradient: "from-blue-500 to-cyan-500"
+              },
+              {
+                title: "Fullstack SaaS Platforms",
+                description: "Complete end-to-end solutions from database design to deployment. Built for scale, optimized for speed.",
+                icon: "🚀",
+                gradient: "from-orange-500 to-red-500"
+              },
+              {
+                title: "CMS & E-commerce",
+                description: "Custom content management and e-commerce platforms with seamless user experiences and powerful admin panels.",
+                icon: "🛍️",
+                gradient: "from-green-500 to-emerald-500"
+              },
+              {
+                title: "Progressive Web Apps",
+                description: "Native-like experiences on the web. Offline support, push notifications, and app-like performance.",
+                icon: "📱",
+                gradient: "from-indigo-500 to-purple-500"
+              },
+              {
+                title: "Performance Optimization",
+                description: "Lightning-fast load times, SEO optimization, and Core Web Vitals excellence. Speed that converts.",
+                icon: "⚡",
+                gradient: "from-yellow-500 to-orange-500"
+              }
+            ].map((service, i) => (
+              <motion.div
+                key={i}
+                className="relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all overflow-hidden group"
+                variants={fadeInUp}
+                onHoverStart={() => setHoveredService(i)}
+                onHoverEnd={() => setHoveredService(null)}
+                whileHover={{ y: -10, scale: 1.02 }}
+              >
+                <motion.div 
+                  className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-10 transition-opacity`}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: hoveredService === i ? 1.5 : 0 }}
+                  transition={{ duration: 0.6 }}
+                />
+                
+                <motion.div 
+                  className="text-6xl mb-6"
+                  animate={{ 
+                    rotate: hoveredService === i ? [0, -10, 10, -10, 0] : 0,
+                    scale: hoveredService === i ? 1.2 : 1
+                  }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {service.icon}
+                </motion.div>
+                
+                <h3 className="text-3xl font-bold mb-4 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed text-lg">
+                  {service.description}
+                </p>
+                
+                <motion.div
+                  className={`absolute bottom-0 left-0 h-1 bg-gradient-to-r ${service.gradient}`}
+                  initial={{ width: "0%" }}
+                  animate={{ width: hoveredService === i ? "100%" : "0%" }}
+                  transition={{ duration: 0.4 }}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Tech Stack - Enhanced with Icons */}
+      <section className="py-24 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            className="text-center mb-16"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <h2 className="text-5xl sm:text-6xl font-bold mb-6">
+              Powerful <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">Tech Stack</span>
+            </h2>
+            <p className="text-xl text-gray-600">Technologies we master to build exceptional products</p>
+          </motion.div>
+
+          <motion.div 
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {[
+              { name: "React", color: "from-cyan-400 to-blue-500" },
+              { name: "Next.js", color: "from-gray-700 to-gray-900" },
+              { name: "Node.js", color: "from-green-500 to-green-700" },
+              { name: "Express", color: "from-gray-600 to-gray-800" },
+              { name: "TailwindCSS", color: "from-cyan-400 to-blue-600" },
+              { name: "MongoDB", color: "from-green-600 to-green-800" },
+              { name: "PostgreSQL", color: "from-blue-500 to-blue-700" },
+              { name: "GraphQL", color: "from-pink-500 to-purple-600" },
+              { name: "TypeScript", color: "from-blue-600 to-blue-800" },
+              { name: "Redux", color: "from-purple-500 to-purple-700" },
+              { name: "Docker", color: "from-blue-400 to-blue-600" },
+              { name: "AWS", color: "from-orange-500 to-yellow-600" }
+            ].map((tech, i) => (
+              <motion.div
+                key={i}
+                className="relative group"
+                variants={scaleIn}
+                onHoverStart={() => setHoveredTech(i)}
+                onHoverEnd={() => setHoveredTech(null)}
+              >
+                <motion.div
+                  className={`bg-gradient-to-br ${tech.color} text-white rounded-2xl px-6 py-8 font-bold text-center shadow-lg cursor-pointer`}
+                  whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.div
+                    animate={{ y: hoveredTech === i ? [-5, 5, -5] : 0 }}
+                    transition={{ duration: 0.5, repeat: hoveredTech === i ? Infinity : 0 }}
+                  >
+                    {tech.name}
+                  </motion.div>
+                </motion.div>
+                
+                <motion.div
+                  className="absolute -inset-1 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-2xl blur-lg -z-10 opacity-0 group-hover:opacity-30 transition-opacity"
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Process Section - Timeline Style */}
+      <section className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            className="text-center mb-20"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <h2 className="text-5xl sm:text-6xl font-bold mb-6">
+              Our <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">Process</span>
+            </h2>
+            <p className="text-xl text-gray-600">A proven methodology that delivers results</p>
+          </motion.div>
+
+          <div className="space-y-12">
+            {[
+              { 
+                step: "01", 
+                title: "Discovery & Strategy", 
+                desc: "Deep dive into your business goals, target audience, and competitive landscape. We create a roadmap for success.",
+                icon: "🎯"
+              },
+              { 
+                step: "02", 
+                title: "UI/UX Design", 
+                desc: "Stunning designs that blend aesthetics with functionality. Wireframes, prototypes, and user testing.",
+                icon: "🎨"
+              },
+              { 
+                step: "03", 
+                title: "Development & Testing", 
+                desc: "Clean, maintainable code following best practices. Rigorous testing across devices and browsers.",
+                icon: "💻"
+              },
+              { 
+                step: "04", 
+                title: "Launch & Scale", 
+                desc: "Smooth deployment with zero downtime. Continuous monitoring, optimization, and support.",
+                icon: "🚀"
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                className="relative"
+                variants={fadeInLeft}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.2, duration: 0.6 }}
+              >
+                <motion.div
+                  className="flex flex-col md:flex-row items-start md:items-center gap-8 bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-shadow"
+                  whileHover={{ x: 10 }}
+                >
+                  <motion.div 
+                    className="flex-shrink-0 w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-white font-bold text-2xl shadow-lg"
+                    whileHover={{ rotate: 360, scale: 1.1 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    {item.step}
+                  </motion.div>
+                  
+                  <div className="flex-grow">
+                    <div className="flex items-center gap-4 mb-3">
+                      <span className="text-4xl">{item.icon}</span>
+                      <h3 className="text-3xl font-bold text-gray-800">{item.title}</h3>
+                    </div>
+                    <p className="text-gray-600 text-lg leading-relaxed">{item.desc}</p>
+                  </div>
+                </motion.div>
+
+                {i < 3 && (
+                  <motion.div
+                    className="hidden md:block absolute left-10 top-full w-1 h-12 bg-gradient-to-b from-blue-600 to-cyan-500"
+                    initial={{ height: 0 }}
+                    whileInView={{ height: 48 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.2 + 0.4, duration: 0.4 }}
+                  />
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Grid */}
+      <section className="py-24 px-6 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            className="text-center mb-16"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <h2 className="text-5xl sm:text-6xl font-bold mb-6">
+              Why Choose <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">Us</span>
+            </h2>
+            <p className="text-xl text-gray-600">Excellence in every aspect of web development</p>
+          </motion.div>
+
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-3 gap-6"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {[
+              { title: "Lightning Fast", icon: "⚡", color: "from-yellow-400 to-orange-500" },
+              { title: "SEO Optimized", icon: "🔍", color: "from-green-400 to-emerald-500" },
+              { title: "Highly Scalable", icon: "📈", color: "from-blue-400 to-indigo-500" },
+              { title: "Bank-Grade Security", icon: "🔒", color: "from-red-400 to-pink-500" },
+              { title: "Mobile First", icon: "📱", color: "from-purple-400 to-pink-500" },
+              { title: "24/7 Support", icon: "💬", color: "from-cyan-400 to-blue-500" },
+            ].map((benefit, i) => (
+              <motion.div
+                key={i}
+                className="relative group"
+                variants={scaleIn}
+              >
+                <motion.div
+                  className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all text-center h-full flex flex-col items-center justify-center"
+                  whileHover={{ y: -10, scale: 1.05 }}
+                >
+                  <motion.div 
+                    className={`text-6xl mb-4 bg-gradient-to-br ${benefit.color} bg-clip-text text-transparent`}
+                    animate={{ 
+                      scale: [1, 1.2, 1],
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    {benefit.icon}
+                  </motion.div>
+                  <h3 className="font-bold text-xl text-gray-800">{benefit.title}</h3>
+                </motion.div>
+                
+                <motion.div
+                  className={`absolute -inset-1 bg-gradient-to-br ${benefit.color} rounded-3xl blur-xl -z-10 opacity-0 group-hover:opacity-20 transition-opacity`}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            className="text-center mb-16"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <h2 className="text-5xl sm:text-6xl font-bold mb-6">
+              Client <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">Love</span>
+            </h2>
+            <p className="text-xl text-gray-600">What our clients say about us</p>
+          </motion.div>
+
+          <motion.div 
+            className="grid md:grid-cols-3 gap-8"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {[
+              {
+                text: "Absolutely incredible work! They transformed our vision into reality with stunning design and flawless functionality.",
+                author: "Sarah Johnson",
+                role: "CEO, TechStart",
+                rating: 5
+              },
+              {
+                text: "The team's expertise and dedication exceeded all expectations. Our website performance improved by 300%!",
+                author: "Michael Chen",
+                role: "CTO, CloudScale",
+                rating: 5
+              },
+              {
+                text: "Professional, responsive, and incredibly talented. Best development team we've ever worked with!",
+                author: "Emily Rodriguez",
+                role: "Founder, ShopHub",
+                rating: 5
+              }
+            ].map((testimonial, i) => (
+              <motion.div
+                key={i}
+                className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all"
+                variants={scaleIn}
+                whileHover={{ y: -10 }}
+              >
+                <div className="flex mb-4">
+                  {[...Array(testimonial.rating)].map((_, j) => (
+                    <motion.span 
+                      key={j}
+                      className="text-yellow-400 text-2xl"
+                      initial={{ opacity: 0, scale: 0 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.2 + j * 0.1 }}
+                    >
+                      ⭐
+                    </motion.span>
+                  ))}
+                </div>
+                <p className="text-gray-700 text-lg mb-6 italic leading-relaxed">"{testimonial.text}"</p>
+                <div className="border-t pt-4">
+                  <p className="font-bold text-gray-800 text-lg">{testimonial.author}</p>
+                  <p className="text-gray-500">{testimonial.role}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Final CTA with Gradient */}
+      <section className="py-32 px-6 bg-gradient-to-br from-blue-600 via-cyan-500 to-blue-700 relative overflow-hidden">
+        <motion.div 
+          className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"
+          animate={{ 
+            x: [0, 100, 0],
+            y: [0, 50, 0]
+          }}
+          transition={{ duration: 20, repeat: Infinity }}
+        />
+        <motion.div 
+          className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"
+          animate={{ 
+            x: [0, -100, 0],
+            y: [0, -50, 0]
+          }}
+          transition={{ duration: 15, repeat: Infinity }}
+        />
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.h2
+            className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-8 text-white"
+            variants={scaleIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            Ready to Build Something Amazing?
+          </motion.h2>
+          
+          <motion.p
+            className="text-xl sm:text-2xl text-blue-50 mb-12 leading-relaxed"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            Let's turn your ideas into a powerful digital presence that drives growth and delights users
+          </motion.p>
+          
+          <motion.div
+            className="flex flex-wrap gap-6 justify-center"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <motion.a
+              href="/contact"
+              className="bg-white text-blue-600 px-12 py-6 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-white/50 transition-all"
+              variants={scaleIn}
+              whileHover={{ scale: 1.1, y: -5 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <div className="text-4xl mb-2">{benefit.icon}</div>
-              <div className="font-semibold text-lg">{benefit.title}</div>
-            </motion.div>
-          ))}
+              Start Your Project Now
+            </motion.a>
+            <motion.a
+              href="/portfolio"
+              className="bg-transparent border-3 border-white text-white px-12 py-6 rounded-2xl font-bold text-xl hover:bg-white/10 transition-all"
+              variants={scaleIn}
+              whileHover={{ scale: 1.1, y: -5 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              View Portfolio
+            </motion.a>
+          </motion.div>
         </div>
-      </div>
+      </section>
 
-      {/* Call To Action */}
-      <div className="max-w-4xl mx-auto text-center py-20">
-        <motion.h2
-          className="text-4xl font-bold mb-6"
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          Ready to start your web project?
-        </motion.h2>
-        <motion.p
-          className="text-gray-600 mb-10"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          Let’s build a high-performance, beautiful website together that drives results.
-        </motion.p>
-        <motion.a
-          href="/contact"
-          className="inline-block bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:scale-105 transition-transform"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          Start Your Project
-        </motion.a>
-      </div>
-
-    </section>
+    </div>
   );
 };
 

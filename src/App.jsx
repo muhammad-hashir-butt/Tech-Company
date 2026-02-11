@@ -3,9 +3,9 @@ import MainLayout from "./layout/MainLayout";
 
 import Home from "./Pages/Home";
 import About from "./Pages/About";
-import Services from "./pages/Services/Services";
-import WebDevelopment from "./pages/Services/WebDevelopment";
-import MobileDevelopment from "./pages/Services/MobileDevelopment";
+import Services from "./Pages/Services/Services";
+import WebDevelopment from "./Pages/Services/WebDevelopment";
+import MobileDevelopment from "./Pages/Services/MobileDevelopment";
 import UiUxDesign from "./pages/Services/UiUxDesign";
 import CloudSolutions from "./pages/Services/CloudSolutions";
 import Projects from "./Pages/Projects";
