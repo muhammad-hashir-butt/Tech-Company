@@ -6,7 +6,7 @@ import About from "./Pages/About";
 import Services from "./Pages/Services/Services";
 import WebDevelopment from "./Pages/Services/WebDevelopment";
 import MobileDevelopment from "./Pages/Services/MobileDevelopment";
-import UiUxDesign from "./Pages/Services/UiUxDesign";
+import UiUxDesign from "../src/Pages/Services/UiUxDesign";
 import CloudSolutions from "./Pages/Services/CloudSolutions";
 import CyberSecurity from "./Pages/Services/CyberSecurity";
 import DatabaseManagement from "./Pages/Services/DatabaseManagement";
