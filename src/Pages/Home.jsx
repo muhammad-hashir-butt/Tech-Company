@@ -154,7 +154,7 @@ const Home = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
-            className="inline-block mb-6 px-6 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-md"
+            className="inline-block mt-10 mb-6 px-6 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-md"
           >
             <span className="text-blue-400 text-sm md:text-base font-bold uppercase tracking-widest flex items-center gap-2">
               <Zap size={16} />
@@ -225,7 +225,7 @@ const Home = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="py-20 px-6 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 relative overflow-hidden"
+        className="py-20 px-6 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 relative overflow-hidden"
       >
         <motion.div
           animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
@@ -545,152 +545,7 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* FOOTER SECTION */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="bg-gradient-to-b from-gray-900 to-black text-gray-300 border-t border-white/10"
-      >
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-            {/* Brand */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-2xl font-bold text-white mb-4">
-                Hashir<span className="text-blue-500">Soft</span>
-              </h2>
-              <p className="text-sm leading-relaxed mb-6">
-                Building digital excellence through innovative software solutions. 
-                We transform ideas into powerful digital experiences that drive business growth.
-              </p>
-              <div className="flex gap-4">
-                {[
-                  { icon: <Facebook size={20} />, label: "Facebook" },
-                  { icon: <Twitter size={20} />, label: "Twitter" },
-                  { icon: <Linkedin size={20} />, label: "LinkedIn" },
-                  { icon: <Instagram size={20} />, label: "Instagram" },
-                  { icon: <Github size={20} />, label: "GitHub" }
-                ].map((social, index) => (
-                  <motion.a
-                    key={index}
-                    href="#"
-                    aria-label={social.label}
-                    whileHover={{ scale: 1.1, y: -3 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="p-2 bg-gray-800 hover:bg-blue-600 rounded-lg transition-colors"
-                  >
-                    {social.icon}
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Quick Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-white font-bold text-lg mb-6">Quick Links</h3>
-              <ul className="space-y-3">
-                {["Home", "About", "Services", "Projects", "Careers", "Contact"].map((link) => (
-                  <li key={link}>
-                    <Link
-                      to={`/${link.toLowerCase()}`}
-                      className="hover:text-white hover:pl-2 transition-all duration-300 inline-block"
-                    >
-                      {link}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Services */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-white font-bold text-lg mb-6">Services</h3>
-              <ul className="space-y-3">
-                {[
-                  "Web Development",
-                  "Mobile Apps",
-                  "UI/UX Design",
-                  "Cloud Solutions",
-                  "DevOps",
-                  "QA & Testing"
-                ].map((service) => (
-                  <li key={service}>
-                    <span className="hover:text-white cursor-pointer transition">
-                      {service}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Newsletter */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-white font-bold text-lg mb-6">Newsletter</h3>
-              <p className="text-sm mb-4">
-                Subscribe to get updates on our latest projects and tech insights.
-              </p>
-              <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 text-white placeholder-gray-500"
-                />
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition"
-                >
-                  Subscribe
-                </motion.button>
-              </form>
-            </motion.div>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-gray-800 my-8"></div>
-
-          {/* Bottom Bar */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            viewport={{ once: true }}
-            className="flex flex-col md:flex-row justify-between items-center gap-4"
-          >
-            <div className="text-sm">
-              © {new Date().getFullYear()} <span className="text-white font-semibold">HashirSoft</span>. 
-              All rights reserved.
-            </div>
-            <div className="flex gap-6 text-sm">
-              <a href="#" className="hover:text-white transition">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition">Terms of Service</a>
-              <a href="#" className="hover:text-white transition">Cookie Policy</a>
-            </div>
-          </motion.div>
-        </div>
-      </motion.footer>
+      
     </div>
   );
 };
