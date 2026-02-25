@@ -1,85 +1,91 @@
+// src/pages/UIDesign.jsx
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const UIDesign = () => {
   const [hoveredService, setHoveredService] = useState(null);
   const [hoveredTool, setHoveredTool] = useState(null);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Animation variants
   const fadeInUp = {
     hidden: { opacity: 0, y: 60 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
   };
 
   const fadeInLeft = {
     hidden: { opacity: 0, x: -60 },
-    visible: { opacity: 1, x: 0 }
-  };
-
-  const fadeInRight = {
-    hidden: { opacity: 0, x: 60 },
-    visible: { opacity: 1, x: 0 }
+    visible: { opacity: 1, x: 0 },
   };
 
   const scaleIn = {
     hidden: { opacity: 0, scale: 0.8 },
-    visible: { opacity: 1, scale: 1 }
+    visible: { opacity: 1, scale: 1 },
   };
 
   const staggerContainer = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15
-      }
-    }
+    visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
   };
 
   return (
-    <div className="bg-gradient-to-b from-gray-50 via-white to-gray-50 overflow-hidden">
-      
-      {/* Hero Section with Gradient Background */}
-      <section className="relative py-32 px-6 overflow-hidden">
-        {/* Animated background elements */}
-        <motion.div 
-          className="absolute top-20 left-10 w-72 h-72 bg-rose-400/20 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3]
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div 
-          className="absolute bottom-20 right-10 w-96 h-96 bg-amber-400/20 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1.2, 1, 1.2],
-            opacity: [0.5, 0.3, 0.5]
-          }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
+    <div className="bg-gradient-to-b from-slate-900 via-gray-900 to-black text-white overflow-hidden relative">
+      {/* HOME-LIKE PARALLAX BACKGROUND */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <motion.div className="absolute inset-0" style={{ y: scrollY * 0.5 }}>
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-purple-900/20 to-black/80 z-10" />
+          <img
+            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80"
+            alt="Technology background"
+            className="w-full h-full object-cover opacity-25"
+          />
+        </motion.div>
 
+        {/* Animated Gradient Orbs */}
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 180, 0],
+            opacity: [0.22, 0.42, 0.22],
+          }}
+          transition={{ duration: 20, repeat: Infinity }}
+          className="absolute top-24 -left-40 w-96 h-96 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            scale: [1.2, 1, 1.2],
+            rotate: [180, 0, 180],
+            opacity: [0.2, 0.38, 0.2],
+          }}
+          transition={{ duration: 25, repeat: Infinity }}
+          className="absolute bottom-24 -right-40 w-96 h-96 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-3xl"
+        />
+      </div>
+
+      {/* Hero Section */}
+      <section className="relative py-28 px-6 overflow-hidden">
         <div className="max-w-6xl mx-auto text-center relative z-10">
-          <motion.div
-            variants={fadeInUp}
-            initial="hidden"
-            animate="visible"
-            transition={{ duration: 0.8 }}
-          >
-            <motion.h1 
-              className="text-6xl sm:text-7xl lg:text-8xl font-extrabold mb-6 bg-gradient-to-r from-rose-600 via-orange-500 to-amber-600 bg-clip-text text-transparent"
-              animate={{ 
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
-              }}
+          <motion.div variants={fadeInUp} initial="hidden" animate="visible" transition={{ duration: 0.8 }}>
+            <motion.h1
+              className="text-6xl sm:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight"
+              animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
               transition={{ duration: 5, repeat: Infinity }}
               style={{ backgroundSize: "200% auto" }}
             >
-              UI/UX Design
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
+                UI/UX Design
+              </span>
             </motion.h1>
           </motion.div>
 
           <motion.p
-            className="text-xl sm:text-2xl lg:text-3xl text-gray-700 mb-12 max-w-4xl mx-auto font-light leading-relaxed"
+            className="text-xl sm:text-2xl lg:text-3xl text-gray-300 mb-12 max-w-4xl mx-auto font-light leading-relaxed"
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
@@ -88,15 +94,10 @@ const UIDesign = () => {
             Creating beautiful, intuitive experiences that users love and businesses need
           </motion.p>
 
-          <motion.div
-            className="flex flex-wrap gap-6 justify-center items-center"
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-          >
+          <motion.div className="flex flex-wrap gap-6 justify-center items-center" variants={staggerContainer} initial="hidden" animate="visible">
             <motion.a
               href="/contact"
-              className="bg-gradient-to-r from-rose-600 to-orange-500 text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-rose-500/50 transition-all"
+              className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-blue-600/40 transition-all"
               variants={scaleIn}
               whileHover={{ scale: 1.05, y: -5 }}
               whileTap={{ scale: 0.95 }}
@@ -105,7 +106,7 @@ const UIDesign = () => {
             </motion.a>
             <motion.a
               href="#portfolio"
-              className="bg-white text-rose-600 px-10 py-5 rounded-2xl font-bold text-lg shadow-xl border-2 border-rose-600 hover:bg-rose-50 transition-all"
+              className="bg-white/5 backdrop-blur-md text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-xl border border-white/15 hover:bg-white/10 hover:border-blue-500/40 transition-all"
               variants={scaleIn}
               whileHover={{ scale: 1.05, y: -5 }}
               whileTap={{ scale: 0.95 }}
@@ -116,10 +117,20 @@ const UIDesign = () => {
         </div>
       </section>
 
-      {/* Statistics Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-rose-600 to-orange-500">
-        <motion.div 
-          className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8"
+      {/* Statistics Section (Home-like) */}
+      <section className="py-20 px-6 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 relative overflow-hidden">
+        <motion.div
+          animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"1\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')",
+            backgroundSize: "30px 30px",
+          }}
+        />
+        <motion.div
+          className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
@@ -129,15 +140,16 @@ const UIDesign = () => {
             { number: "800+", label: "Designs Delivered" },
             { number: "95%", label: "Client Satisfaction" },
             { number: "40+", label: "Expert Designers" },
-            { number: "15+", label: "Years Experience" }
+            { number: "15+", label: "Years Experience" },
           ].map((stat, i) => (
             <motion.div
               key={i}
-              className="text-center text-white"
+              className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
               variants={scaleIn}
+              whileHover={{ scale: 1.05, y: -5 }}
             >
-              <motion.h3 
-                className="text-5xl md:text-6xl font-bold mb-2"
+              <motion.h3
+                className="text-5xl md:text-6xl font-extrabold mb-2 text-white"
                 initial={{ opacity: 0, scale: 0 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -145,13 +157,13 @@ const UIDesign = () => {
               >
                 {stat.number}
               </motion.h3>
-              <p className="text-rose-100 text-lg font-medium">{stat.label}</p>
+              <p className="text-white/90 text-lg font-medium">{stat.label}</p>
             </motion.div>
           ))}
         </motion.div>
       </section>
 
-      {/* Services Section - Enhanced */}
+      {/* Services Section (dark glass cards) */}
       <section className="py-24 px-6">
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -163,14 +175,17 @@ const UIDesign = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-5xl sm:text-6xl font-bold mb-6">
-              Design <span className="bg-gradient-to-r from-rose-600 to-orange-500 bg-clip-text text-transparent">Services</span>
+              Design{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
+                Services
+              </span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Comprehensive UI/UX solutions that drive engagement and conversions
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="grid md:grid-cols-2 gap-8"
             variants={staggerContainer}
             initial="hidden"
@@ -180,74 +195,76 @@ const UIDesign = () => {
             {[
               {
                 title: "User Research & Testing",
-                description: "Deep user insights through interviews, surveys, and usability testing. Data-driven decisions for optimal user experiences.",
+                description:
+                  "Deep user insights through interviews, surveys, and usability testing. Data-driven decisions for optimal user experiences.",
                 icon: "🔍",
-                gradient: "from-blue-500 to-cyan-500"
+                gradient: "from-blue-500 to-cyan-500",
               },
               {
                 title: "Wireframing & Prototyping",
-                description: "Interactive wireframes and clickable prototypes. Test concepts early, iterate fast, and validate before development.",
+                description:
+                  "Interactive wireframes and clickable prototypes. Test concepts early, iterate fast, and validate before development.",
                 icon: "📐",
-                gradient: "from-purple-500 to-pink-500"
+                gradient: "from-purple-500 to-pink-500",
               },
               {
                 title: "Visual Design",
-                description: "Stunning interfaces with pixel-perfect precision. Typography, color theory, and visual hierarchy that converts.",
+                description:
+                  "Stunning interfaces with pixel-perfect precision. Typography, color theory, and visual hierarchy that converts.",
                 icon: "🎨",
-                gradient: "from-rose-500 to-orange-500"
+                gradient: "from-rose-500 to-orange-500",
               },
               {
                 title: "Design Systems",
-                description: "Scalable component libraries and design tokens. Consistent brand experience across all touchpoints.",
+                description:
+                  "Scalable component libraries and design tokens. Consistent brand experience across all touchpoints.",
                 icon: "🧩",
-                gradient: "from-green-500 to-emerald-500"
+                gradient: "from-green-500 to-emerald-500",
               },
               {
                 title: "Mobile App Design",
-                description: "Native iOS and Android design patterns. Touch-optimized interfaces that feel natural on every device.",
+                description:
+                  "Native iOS and Android design patterns. Touch-optimized interfaces that feel natural on every device.",
                 icon: "📱",
-                gradient: "from-indigo-500 to-purple-500"
+                gradient: "from-indigo-500 to-purple-500",
               },
               {
                 title: "Web Design",
-                description: "Responsive websites that adapt beautifully. From landing pages to complex web applications.",
+                description:
+                  "Responsive websites that adapt beautifully. From landing pages to complex web applications.",
                 icon: "💻",
-                gradient: "from-orange-500 to-red-500"
-              }
+                gradient: "from-orange-500 to-red-500",
+              },
             ].map((service, i) => (
               <motion.div
                 key={i}
-                className="relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all overflow-hidden group"
+                className="relative bg-gradient-to-b from-white/8 to-white/0 border border-white/12 backdrop-blur-lg rounded-3xl p-8 hover:border-blue-500/40 transition-all overflow-hidden group"
                 variants={fadeInUp}
                 onHoverStart={() => setHoveredService(i)}
                 onHoverEnd={() => setHoveredService(null)}
                 whileHover={{ y: -10, scale: 1.02 }}
               >
-                <motion.div 
+                <motion.div
                   className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-10 transition-opacity`}
                   initial={{ scale: 0 }}
                   animate={{ scale: hoveredService === i ? 1.5 : 0 }}
                   transition={{ duration: 0.6 }}
                 />
-                
-                <motion.div 
+
+                <motion.div
                   className="text-6xl mb-6"
-                  animate={{ 
+                  animate={{
                     rotate: hoveredService === i ? [0, -10, 10, -10, 0] : 0,
-                    scale: hoveredService === i ? 1.2 : 1
+                    scale: hoveredService === i ? 1.2 : 1,
                   }}
                   transition={{ duration: 0.5 }}
                 >
                   {service.icon}
                 </motion.div>
-                
-                <h3 className="text-3xl font-bold mb-4 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-                  {service.title}
-                </h3>
-                <p className="text-gray-600 leading-relaxed text-lg">
-                  {service.description}
-                </p>
-                
+
+                <h3 className="text-3xl font-bold mb-4 text-white">{service.title}</h3>
+                <p className="text-gray-300 leading-relaxed text-lg">{service.description}</p>
+
                 <motion.div
                   className={`absolute bottom-0 left-0 h-1 bg-gradient-to-r ${service.gradient}`}
                   initial={{ width: "0%" }}
@@ -260,23 +277,20 @@ const UIDesign = () => {
         </div>
       </section>
 
-      {/* Design Tools - Enhanced */}
-      <section className="py-24 px-6 bg-gray-50">
+      {/* Design Tools (dark section) */}
+      <section className="py-24 px-6 bg-black/35 border-y border-white/10">
         <div className="max-w-6xl mx-auto">
-          <motion.div
-            className="text-center mb-16"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <motion.div className="text-center mb-16" variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h2 className="text-5xl sm:text-6xl font-bold mb-6">
-              Design <span className="bg-gradient-to-r from-rose-600 to-orange-500 bg-clip-text text-transparent">Toolkit</span>
+              Design{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
+                Toolkit
+              </span>
             </h2>
-            <p className="text-xl text-gray-600">Industry-leading tools for world-class designs</p>
+            <p className="text-xl text-gray-300">Industry-leading tools for world-class designs</p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6"
             variants={staggerContainer}
             initial="hidden"
@@ -295,7 +309,7 @@ const UIDesign = () => {
               { name: "After Effects", color: "from-purple-600 to-blue-600" },
               { name: "Zeplin", color: "from-orange-500 to-yellow-500" },
               { name: "Miro", color: "from-yellow-400 to-orange-500" },
-              { name: "Maze", color: "from-indigo-500 to-purple-600" }
+              { name: "Maze", color: "from-indigo-500 to-purple-600" },
             ].map((tool, i) => (
               <motion.div
                 key={i}
@@ -317,33 +331,28 @@ const UIDesign = () => {
                     {tool.name}
                   </motion.div>
                 </motion.div>
-                
-                <motion.div
-                  className="absolute -inset-1 bg-gradient-to-br from-rose-400 to-orange-400 rounded-2xl blur-lg -z-10 opacity-0 group-hover:opacity-30 transition-opacity"
-                />
+
+                <motion.div className="absolute -inset-1 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-2xl blur-lg -z-10 opacity-0 group-hover:opacity-30 transition-opacity" />
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Design Principles Section */}
+      {/* Design Principles (dark cards) */}
       <section className="py-24 px-6">
         <div className="max-w-6xl mx-auto">
-          <motion.div
-            className="text-center mb-20"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <motion.div className="text-center mb-20" variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h2 className="text-5xl sm:text-6xl font-bold mb-6">
-              Design <span className="bg-gradient-to-r from-rose-600 to-orange-500 bg-clip-text text-transparent">Principles</span>
+              Design{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
+                Principles
+              </span>
             </h2>
-            <p className="text-xl text-gray-600">Our foundation for exceptional user experiences</p>
+            <p className="text-xl text-gray-300">Our foundation for exceptional user experiences</p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="grid md:grid-cols-3 gap-8"
             variants={staggerContainer}
             initial="hidden"
@@ -351,128 +360,57 @@ const UIDesign = () => {
             viewport={{ once: true, amount: 0.2 }}
           >
             {[
-              {
-                title: "User-Centered",
-                description: "Every decision starts with understanding user needs, goals, and pain points",
-                icon: "👥",
-                gradient: "from-blue-400 to-cyan-500"
-              },
-              {
-                title: "Accessibility First",
-                description: "WCAG compliant designs that work for everyone, including users with disabilities",
-                icon: "♿",
-                gradient: "from-green-400 to-emerald-500"
-              },
-              {
-                title: "Data-Driven",
-                description: "Decisions backed by analytics, user research, and A/B testing results",
-                icon: "📊",
-                gradient: "from-purple-400 to-pink-500"
-              },
-              {
-                title: "Consistency",
-                description: "Unified design language across all platforms and touchpoints",
-                icon: "🎯",
-                gradient: "from-orange-400 to-red-500"
-              },
-              {
-                title: "Simplicity",
-                description: "Clean, minimal interfaces that reduce cognitive load and improve usability",
-                icon: "✨",
-                gradient: "from-indigo-400 to-purple-500"
-              },
-              {
-                title: "Delight",
-                description: "Thoughtful micro-interactions and animations that create memorable experiences",
-                icon: "💫",
-                gradient: "from-pink-400 to-rose-500"
-              }
+              { title: "User-Centered", description: "Every decision starts with understanding user needs, goals, and pain points", icon: "👥", gradient: "from-blue-400 to-cyan-500" },
+              { title: "Accessibility First", description: "WCAG compliant designs that work for everyone, including users with disabilities", icon: "♿", gradient: "from-green-400 to-emerald-500" },
+              { title: "Data-Driven", description: "Decisions backed by analytics, user research, and A/B testing results", icon: "📊", gradient: "from-purple-400 to-pink-500" },
+              { title: "Consistency", description: "Unified design language across all platforms and touchpoints", icon: "🎯", gradient: "from-orange-400 to-red-500" },
+              { title: "Simplicity", description: "Clean, minimal interfaces that reduce cognitive load and improve usability", icon: "✨", gradient: "from-indigo-400 to-purple-500" },
+              { title: "Delight", description: "Thoughtful micro-interactions and animations that create memorable experiences", icon: "💫", gradient: "from-pink-400 to-rose-500" },
             ].map((principle, i) => (
-              <motion.div
-                key={i}
-                className="relative group"
-                variants={scaleIn}
-              >
+              <motion.div key={i} className="relative group" variants={scaleIn}>
                 <motion.div
-                  className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all h-full"
+                  className="bg-gradient-to-b from-white/8 to-white/0 border border-white/12 backdrop-blur-lg rounded-3xl p-8 hover:border-blue-500/40 transition-all h-full"
                   whileHover={{ y: -10, scale: 1.03 }}
                 >
-                  <motion.div 
+                  <motion.div
                     className={`text-5xl mb-4 bg-gradient-to-br ${principle.gradient} bg-clip-text text-transparent`}
-                    animate={{ 
-                      scale: [1, 1.2, 1],
-                    }}
+                    animate={{ scale: [1, 1.2, 1] }}
                     transition={{ duration: 2, repeat: Infinity }}
                   >
                     {principle.icon}
                   </motion.div>
-                  <h3 className="font-bold text-xl text-gray-800 mb-3">{principle.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{principle.description}</p>
+                  <h3 className="font-bold text-xl text-white mb-3">{principle.title}</h3>
+                  <p className="text-gray-300 leading-relaxed">{principle.description}</p>
                 </motion.div>
-                
-                <motion.div
-                  className={`absolute -inset-1 bg-gradient-to-br ${principle.gradient} rounded-3xl blur-xl -z-10 opacity-0 group-hover:opacity-20 transition-opacity`}
-                />
+
+                <motion.div className={`absolute -inset-1 bg-gradient-to-br ${principle.gradient} rounded-3xl blur-xl -z-10 opacity-0 group-hover:opacity-20 transition-opacity`} />
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Design Process - Timeline */}
-      <section className="py-24 px-6 bg-gray-50">
+      {/* Design Process (dark cards) */}
+      <section className="py-24 px-6 bg-black/35 border-y border-white/10">
         <div className="max-w-5xl mx-auto">
-          <motion.div
-            className="text-center mb-20"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <motion.div className="text-center mb-20" variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h2 className="text-5xl sm:text-6xl font-bold mb-6">
-              Our Design <span className="bg-gradient-to-r from-rose-600 to-orange-500 bg-clip-text text-transparent">Process</span>
+              Our Design{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
+                Process
+              </span>
             </h2>
-            <p className="text-xl text-gray-600">From research to pixel-perfect delivery</p>
+            <p className="text-xl text-gray-300">From research to pixel-perfect delivery</p>
           </motion.div>
 
           <div className="space-y-12">
             {[
-              { 
-                step: "01", 
-                title: "Discover & Research", 
-                desc: "User interviews, competitive analysis, and stakeholder workshops. Understanding the problem before designing solutions.",
-                icon: "🔍"
-              },
-              { 
-                step: "02", 
-                title: "Define & Ideate", 
-                desc: "User personas, journey maps, and information architecture. Defining the strategy and exploring creative solutions.",
-                icon: "💡"
-              },
-              { 
-                step: "03", 
-                title: "Wireframe & Structure", 
-                desc: "Low-fidelity layouts and user flows. Testing concepts with stakeholders before investing in visual design.",
-                icon: "📐"
-              },
-              { 
-                step: "04", 
-                title: "Design & Prototype", 
-                desc: "High-fidelity mockups and interactive prototypes. Bringing designs to life with animations and micro-interactions.",
-                icon: "🎨"
-              },
-              { 
-                step: "05", 
-                title: "Test & Iterate", 
-                desc: "Usability testing with real users. Gathering feedback and refining designs based on actual behavior.",
-                icon: "🧪"
-              },
-              { 
-                step: "06", 
-                title: "Deliver & Support", 
-                desc: "Design handoff with specs and assets. Ongoing collaboration with developers to ensure perfect implementation.",
-                icon: "🚀"
-              },
+              { step: "01", title: "Discover & Research", desc: "User interviews, competitive analysis, and stakeholder workshops. Understanding the problem before designing solutions.", icon: "🔍" },
+              { step: "02", title: "Define & Ideate", desc: "User personas, journey maps, and information architecture. Defining the strategy and exploring creative solutions.", icon: "💡" },
+              { step: "03", title: "Wireframe & Structure", desc: "Low-fidelity layouts and user flows. Testing concepts with stakeholders before investing in visual design.", icon: "📐" },
+              { step: "04", title: "Design & Prototype", desc: "High-fidelity mockups and interactive prototypes. Bringing designs to life with animations and micro-interactions.", icon: "🎨" },
+              { step: "05", title: "Test & Iterate", desc: "Usability testing with real users. Gathering feedback and refining designs based on actual behavior.", icon: "🧪" },
+              { step: "06", title: "Deliver & Support", desc: "Design handoff with specs and assets. Ongoing collaboration with developers to ensure perfect implementation.", icon: "🚀" },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -484,29 +422,29 @@ const UIDesign = () => {
                 transition={{ delay: i * 0.15, duration: 0.6 }}
               >
                 <motion.div
-                  className="flex flex-col md:flex-row items-start md:items-center gap-8 bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-shadow"
+                  className="flex flex-col md:flex-row items-start md:items-center gap-8 bg-gradient-to-b from-white/8 to-white/0 border border-white/12 backdrop-blur-lg rounded-3xl p-8 hover:border-blue-500/40 transition-all"
                   whileHover={{ x: 10 }}
                 >
-                  <motion.div 
-                    className="flex-shrink-0 w-20 h-20 rounded-2xl bg-gradient-to-br from-rose-600 to-orange-500 flex items-center justify-center text-white font-bold text-2xl shadow-lg"
+                  <motion.div
+                    className="flex-shrink-0 w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-white font-bold text-2xl shadow-lg"
                     whileHover={{ rotate: 360, scale: 1.1 }}
                     transition={{ duration: 0.6 }}
                   >
                     {item.step}
                   </motion.div>
-                  
+
                   <div className="flex-grow">
                     <div className="flex items-center gap-4 mb-3">
                       <span className="text-4xl">{item.icon}</span>
-                      <h3 className="text-3xl font-bold text-gray-800">{item.title}</h3>
+                      <h3 className="text-3xl font-bold text-white">{item.title}</h3>
                     </div>
-                    <p className="text-gray-600 text-lg leading-relaxed">{item.desc}</p>
+                    <p className="text-gray-300 text-lg leading-relaxed">{item.desc}</p>
                   </div>
                 </motion.div>
 
                 {i < 5 && (
                   <motion.div
-                    className="hidden md:block absolute left-10 top-full w-1 h-12 bg-gradient-to-b from-rose-600 to-orange-500"
+                    className="hidden md:block absolute left-10 top-full w-1 h-12 bg-gradient-to-b from-blue-600 to-cyan-500"
                     initial={{ height: 0 }}
                     whileInView={{ height: 48 }}
                     viewport={{ once: true }}
@@ -519,29 +457,20 @@ const UIDesign = () => {
         </div>
       </section>
 
-      {/* Why Choose Us */}
+      {/* Why Choose Us (dark cards) */}
       <section className="py-24 px-6">
         <div className="max-w-6xl mx-auto">
-          <motion.div
-            className="text-center mb-16"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <motion.div className="text-center mb-16" variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h2 className="text-5xl sm:text-6xl font-bold mb-6">
-              Why Choose <span className="bg-gradient-to-r from-rose-600 to-orange-500 bg-clip-text text-transparent">Us</span>
+              Why Choose{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
+                Us
+              </span>
             </h2>
-            <p className="text-xl text-gray-600">Award-winning design that delivers results</p>
+            <p className="text-xl text-gray-300">Award-winning design that delivers results</p>
           </motion.div>
 
-          <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 gap-6"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-          >
+          <motion.div className="grid grid-cols-2 md:grid-cols-3 gap-6" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}>
             {[
               { title: "Pixel Perfect", icon: "🎯", color: "from-rose-400 to-pink-500" },
               { title: "User-Focused", icon: "👥", color: "from-blue-400 to-cyan-500" },
@@ -550,103 +479,74 @@ const UIDesign = () => {
               { title: "Unlimited Revisions", icon: "🔄", color: "from-green-400 to-emerald-500" },
               { title: "Design System", icon: "🧩", color: "from-orange-400 to-red-500" },
             ].map((benefit, i) => (
-              <motion.div
-                key={i}
-                className="relative group"
-                variants={scaleIn}
-              >
+              <motion.div key={i} className="relative group" variants={scaleIn}>
                 <motion.div
-                  className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all text-center h-full flex flex-col items-center justify-center"
+                  className="bg-gradient-to-b from-white/8 to-white/0 border border-white/12 backdrop-blur-lg rounded-3xl p-8 hover:border-blue-500/40 transition-all text-center h-full flex flex-col items-center justify-center"
                   whileHover={{ y: -10, scale: 1.05 }}
                 >
-                  <motion.div 
-                    className={`text-6xl mb-4 bg-gradient-to-br ${benefit.color} bg-clip-text text-transparent`}
-                    animate={{ 
-                      scale: [1, 1.2, 1],
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
+                  <motion.div className={`text-6xl mb-4 bg-gradient-to-br ${benefit.color} bg-clip-text text-transparent`} animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }}>
                     {benefit.icon}
                   </motion.div>
-                  <h3 className="font-bold text-xl text-gray-800">{benefit.title}</h3>
+                  <h3 className="font-bold text-xl text-white">{benefit.title}</h3>
                 </motion.div>
-                
-                <motion.div
-                  className={`absolute -inset-1 bg-gradient-to-br ${benefit.color} rounded-3xl blur-xl -z-10 opacity-0 group-hover:opacity-20 transition-opacity`}
-                />
+                <motion.div className={`absolute -inset-1 bg-gradient-to-br ${benefit.color} rounded-3xl blur-xl -z-10 opacity-0 group-hover:opacity-20 transition-opacity`} />
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-24 px-6 bg-gray-50">
+      {/* Testimonials (dark cards) */}
+      <section className="py-24 px-6 bg-black/35 border-y border-white/10">
         <div className="max-w-6xl mx-auto">
-          <motion.div
-            className="text-center mb-16"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          <motion.div className="text-center mb-16" variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <h2 className="text-5xl sm:text-6xl font-bold mb-6">
-              Client <span className="bg-gradient-to-r from-rose-600 to-orange-500 bg-clip-text text-transparent">Testimonials</span>
+              Client{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
+                Testimonials
+              </span>
             </h2>
-            <p className="text-xl text-gray-600">What our clients say about our designs</p>
+            <p className="text-xl text-gray-300">What our clients say about our designs</p>
           </motion.div>
 
-          <motion.div 
-            className="grid md:grid-cols-3 gap-8"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-          >
+          <motion.div className="grid md:grid-cols-3 gap-8" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}>
             {[
               {
                 text: "The UI/UX redesign increased our conversion rate by 250%! Their attention to detail and user research was phenomenal.",
                 author: "Rachel Thompson",
                 role: "VP Product, TechFlow",
-                rating: 5
+                rating: 5,
               },
               {
                 text: "Best design team we've worked with. They transformed our complex product into an intuitive, beautiful experience.",
                 author: "James Liu",
                 role: "CEO, DataViz",
-                rating: 5
+                rating: 5,
               },
               {
                 text: "Our app went from 3.2★ to 4.8★ after their redesign. Users love the new interface and our engagement is through the roof!",
                 author: "Sofia Martinez",
                 role: "Product Manager, HealthApp",
-                rating: 5
-              }
+                rating: 5,
+              },
             ].map((testimonial, i) => (
               <motion.div
                 key={i}
-                className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all"
+                className="bg-gradient-to-b from-white/8 to-white/0 border border-white/12 backdrop-blur-lg rounded-3xl p-8 hover:border-blue-500/40 transition-all"
                 variants={scaleIn}
                 whileHover={{ y: -10 }}
               >
                 <div className="flex mb-4">
                   {[...Array(testimonial.rating)].map((_, j) => (
-                    <motion.span 
-                      key={j}
-                      className="text-yellow-400 text-2xl"
-                      initial={{ opacity: 0, scale: 0 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.2 + j * 0.1 }}
-                    >
+                    <motion.span key={j} className="text-yellow-300 text-2xl" initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.15 + j * 0.08 }}>
                       ⭐
                     </motion.span>
                   ))}
                 </div>
-                <p className="text-gray-700 text-lg mb-6 italic leading-relaxed">"{testimonial.text}"</p>
-                <div className="border-t pt-4">
-                  <p className="font-bold text-gray-800 text-lg">{testimonial.author}</p>
-                  <p className="text-gray-500">{testimonial.role}</p>
+                <p className="text-gray-200 text-lg mb-6 italic leading-relaxed">"{testimonial.text}"</p>
+                <div className="border-t border-white/10 pt-4">
+                  <p className="font-bold text-white text-lg">{testimonial.author}</p>
+                  <p className="text-gray-300/80">{testimonial.role}</p>
                 </div>
               </motion.div>
             ))}
@@ -654,68 +554,39 @@ const UIDesign = () => {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-32 px-6 bg-gradient-to-br from-rose-600 via-orange-500 to-amber-600 relative overflow-hidden">
-        <motion.div 
-          className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"
-          animate={{ 
-            x: [0, 100, 0],
-            y: [0, 50, 0]
-          }}
-          transition={{ duration: 20, repeat: Infinity }}
-        />
-        <motion.div 
-          className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"
-          animate={{ 
-            x: [0, -100, 0],
-            y: [0, -50, 0]
-          }}
-          transition={{ duration: 15, repeat: Infinity }}
-        />
+      {/* Final CTA (dark, home vibe) */}
+      <section className="py-28 px-6 relative overflow-hidden">
+        <motion.div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl" animate={{ x: [0, 100, 0], y: [0, 50, 0] }} transition={{ duration: 20, repeat: Infinity }} />
+        <motion.div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl" animate={{ x: [0, -100, 0], y: [0, -50, 0] }} transition={{ duration: 15, repeat: Infinity }} />
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <motion.h2
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-8 text-white"
-            variants={scaleIn}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            Ready to Create Something Beautiful?
+          <motion.h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-8" variants={scaleIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            Ready to Create Something{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
+              Beautiful
+            </span>
+            ?
           </motion.h2>
-          
-          <motion.p
-            className="text-xl sm:text-2xl text-orange-50 mb-12 leading-relaxed"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
+
+          <motion.p className="text-xl sm:text-2xl text-gray-300 mb-12 leading-relaxed" variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} transition={{ delay: 0.2 }}>
             Let's design an experience that your users will love and your business will thrive on
           </motion.p>
-          
-          <motion.div
-            className="flex flex-wrap gap-6 justify-center"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+
+          <motion.div className="flex flex-wrap gap-6 justify-center" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <motion.a
               href="/contact"
-              className="bg-white text-rose-600 px-12 py-6 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-white/50 transition-all"
+              className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-12 py-6 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-blue-600/40 transition-all"
               variants={scaleIn}
-              whileHover={{ scale: 1.1, y: -5 }}
+              whileHover={{ scale: 1.08, y: -5 }}
               whileTap={{ scale: 0.95 }}
             >
               Start Your Design Project
             </motion.a>
             <motion.a
               href="/case-studies"
-              className="bg-transparent border-3 border-white text-white px-12 py-6 rounded-2xl font-bold text-xl hover:bg-white/10 transition-all"
+              className="bg-white/5 backdrop-blur-md border border-white/15 text-white px-12 py-6 rounded-2xl font-bold text-xl hover:bg-white/10 hover:border-blue-500/40 transition-all"
               variants={scaleIn}
-              whileHover={{ scale: 1.1, y: -5 }}
+              whileHover={{ scale: 1.08, y: -5 }}
               whileTap={{ scale: 0.95 }}
             >
               View Case Studies
@@ -723,174 +594,6 @@ const UIDesign = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
-            {/* Company Info */}
-            <motion.div
-              variants={fadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="md:col-span-1"
-            >
-              <motion.h3 
-                className="text-3xl font-bold mb-4 bg-gradient-to-r from-rose-400 to-orange-400 bg-clip-text text-transparent"
-                whileHover={{ scale: 1.05 }}
-              >
-                DesignStudio
-              </motion.h3>
-              <p className="text-gray-400 leading-relaxed mb-6">
-                Creating beautiful, user-centered designs that drive business success and delight users.
-              </p>
-              <div className="flex gap-4">
-                {[
-                  { icon: "📘", link: "#facebook" },
-                  { icon: "🐦", link: "#twitter" },
-                  { icon: "💼", link: "#linkedin" },
-                  { icon: "📷", link: "#instagram" }
-                ].map((social, i) => (
-                  <motion.a
-                    key={i}
-                    href={social.link}
-                    className="w-12 h-12 rounded-full bg-gradient-to-br from-rose-600 to-orange-500 flex items-center justify-center text-2xl hover:shadow-lg hover:shadow-rose-500/50 transition-all"
-                    whileHover={{ scale: 1.2, rotate: 360 }}
-                    whileTap={{ scale: 0.9 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {social.icon}
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Services */}
-            <motion.div
-              variants={fadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-            >
-              <h4 className="text-xl font-bold mb-6 text-orange-400">Services</h4>
-              <ul className="space-y-3">
-                {["User Research", "Wireframing", "Visual Design", "Design Systems", "Mobile App Design", "Web Design"].map((service, i) => (
-                  <motion.li 
-                    key={i}
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors">
-                      → {service}
-                    </a>
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Quick Links */}
-            <motion.div
-              variants={fadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              <h4 className="text-xl font-bold mb-6 text-orange-400">Quick Links</h4>
-              <ul className="space-y-3">
-                {["About Us", "Portfolio", "Case Studies", "Blog", "Careers", "Contact"].map((link, i) => (
-                  <motion.li 
-                    key={i}
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors">
-                      → {link}
-                    </a>
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Contact Info */}
-            <motion.div
-              variants={fadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-            >
-              <h4 className="text-xl font-bold mb-6 text-orange-400">Get In Touch</h4>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-3 text-gray-400">
-                  <span className="text-2xl">📧</span>
-                  <div>
-                    <p className="text-sm text-gray-500">Email</p>
-                    <a href="mailto:hello@designstudio.com" className="hover:text-orange-400 transition-colors">
-                      hello@designstudio.com
-                    </a>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3 text-gray-400">
-                  <span className="text-2xl">📞</span>
-                  <div>
-                    <p className="text-sm text-gray-500">Phone</p>
-                    <a href="tel:+1234567890" className="hover:text-orange-400 transition-colors">
-                      +1 (234) 567-890
-                    </a>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3 text-gray-400">
-                  <span className="text-2xl">📍</span>
-                  <div>
-                    <p className="text-sm text-gray-500">Location</p>
-                    <p>San Francisco, CA</p>
-                  </div>
-                </li>
-              </ul>
-            </motion.div>
-          </div>
-
-          {/* Bottom Bar */}
-          <motion.div 
-            className="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <p className="text-gray-400 text-sm">
-              © 2026 DesignStudio. All rights reserved. Crafted with ❤️ and Figma.
-            </p>
-            <div className="flex gap-6 text-sm">
-              <motion.a 
-                href="#" 
-                className="text-gray-400 hover:text-orange-400 transition-colors"
-                whileHover={{ y: -2 }}
-              >
-                Privacy Policy
-              </motion.a>
-              <motion.a 
-                href="#" 
-                className="text-gray-400 hover:text-orange-400 transition-colors"
-                whileHover={{ y: -2 }}
-              >
-                Terms of Service
-              </motion.a>
-              <motion.a 
-                href="#" 
-                className="text-gray-400 hover:text-orange-400 transition-colors"
-                whileHover={{ y: -2 }}
-              >
-                Cookie Policy
-              </motion.a>
-            </div>
-          </motion.div>
-        </div>
-      </footer>
-
     </div>
   );
 };

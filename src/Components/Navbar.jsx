@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "../assets/devhype (2).png";
+import logo from "../assets/Logo.png";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -22,7 +22,7 @@ const Navbar = () => {
 
           {/* LOGO */}
           <Link to="/">
-            <img src={logo} className="h-20" alt="DevHype Logo" />
+            <img src={logo} className="h-45 w-40 pb-1.5" alt="TechAz Solutions" />
           </Link>
 
           {/* DESKTOP */}
