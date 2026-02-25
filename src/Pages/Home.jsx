@@ -545,7 +545,11 @@ const Home = () => {
         </motion.div>
       </section>
 
+<<<<<<< HEAD
      
+=======
+      
+>>>>>>> 90ae2402c6a3fb5748c879e60f32c32a58d6839d
     </div>
   );
 };
