@@ -1,749 +1,344 @@
-// src/pages/Careers.jsx
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Briefcase,
-  DollarSign,
-  Users,
-  Globe,
-  Clock,
-  Award,
-  MapPin,
-  Calendar,
-  Send,
-  Heart,
-  Zap,
-  Coffee,
-  Target,
-  TrendingUp,
-  Smile,
-  CheckCircle,
-  ArrowRight,
-  X,
-} from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import { 
+  FaArrowRight, FaLinkedin, FaTwitter, FaGithub, FaMapMarkerAlt, FaDollarSign, FaClock 
+} from "react-icons/fa";
+import { Zap, Briefcase, Globe, Award, Users, Heart, Coffee, Target, TrendingUp, Smile, CheckCircle, Send, X, Calendar, Clock } from "lucide-react";
 
-const Careers = () => {
-  const [selectedJob, setSelectedJob] = useState(null);
-  const [scrollY, setScrollY] = useState(0);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    position: "",
-    resume: "",
-    message: "",
-  });
+/* ═══════════════════════════════════════════════════════════
+   OPTIMIZED BACKGROUND & CURSOR (CONSISTENT)
+═══════════════════════════════════════════════════════════ */
+const CustomCursor = () => {
+  const cx = useMotionValue(-100);
+  const cy = useMotionValue(-100);
+  const tx = useSpring(cx, { stiffness: 120, damping: 25 });
+  const ty = useSpring(cy, { stiffness: 120, damping: 25 });
+  const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const move = (e) => { cx.set(e.clientX); cy.set(e.clientY); };
+    const over = (e) => { if (e.target.closest("a,button,input,select,textarea")) setHovered(true); };
+    const out  = (e) => { if (e.target.closest("a,button,input,select,textarea")) setHovered(false); };
+    window.addEventListener("mousemove", move, { passive: true });
+    window.addEventListener("mouseover", over);
+    window.addEventListener("mouseout",  out);
+    return () => {
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseover", over);
+      window.removeEventListener("mouseout",  out);
+    };
+  }, [cx, cy]);
+
+  return (
+    <>
+      <motion.div style={{ x: cx, y: cy, translateX: "-50%", translateY: "-50%" }}
+        className="fixed top-0 left-0 w-3 h-3 bg-violet-500 rounded-full pointer-events-none z-[9999]" />
+      <motion.div style={{ x: tx, y: ty, translateX: "-50%", translateY: "-50%" }}
+        animate={{ scale: hovered ? 1.8 : 1, borderColor: hovered ? "#a78bfa" : "rgba(255,255,255,0.2)" }}
+        className="fixed top-0 left-0 w-10 h-10 border rounded-full pointer-events-none z-[9998]" />
+    </>
+  );
+};
+
+const ParticleCanvas = () => {
+  const canvasRef = useRef(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d", { alpha: true });
+    let animId;
+    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+    resize();
+    window.addEventListener("resize", resize);
+    const particles = Array.from({ length: 35 }, () => ({
+      x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.2, vy: (Math.random() - 0.5) * 0.2, r: Math.random() * 1.5 + 0.5,
+    }));
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(139, 92, 246, 0.25)";
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      });
+      animId = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => { cancelAnimationFrame(animId); window.removeEventListener("resize", resize); };
   }, []);
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-40" />;
+};
 
-  const openings = [
-    {
-      title: "Senior React Developer",
-      type: "Full-time",
-      location: "Remote",
-      department: "Engineering",
-      salary: "$80k - $120k",
-      experience: "5+ years",
-      skills: ["React", "TypeScript", "Node.js", "AWS"],
-      description: "We're looking for an experienced React developer to build scalable web applications.",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
-    },
-    {
-      title: "UI/UX Designer",
-      type: "Full-time",
-      location: "Karachi, PK",
-      department: "Design",
-      salary: "$60k - $90k",
-      experience: "3+ years",
-      skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
-      description: "Create beautiful and intuitive user experiences for our digital products.",
-      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
-    },
-    {
-      title: "DevOps Engineer",
-      type: "Contract",
-      location: "Remote",
-      department: "Operations",
-      salary: "$90k - $130k",
-      experience: "4+ years",
-      skills: ["Kubernetes", "Docker", "CI/CD", "AWS/Azure"],
-      description: "Manage and optimize our cloud infrastructure and deployment pipelines.",
-      image: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=800&q=80",
-    },
-    {
-      title: "Project Manager",
-      type: "Full-time",
-      location: "Lahore, PK",
-      department: "Management",
-      salary: "$70k - $100k",
-      experience: "5+ years",
-      skills: ["Agile", "Scrum", "JIRA", "Team Leadership"],
-      description: "Lead cross-functional teams to deliver projects on time and within budget.",
-      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80",
-    },
-    {
-      title: "QA Engineer",
-      type: "Full-time",
-      location: "Islamabad, PK",
-      department: "Engineering",
-      salary: "$50k - $75k",
-      experience: "3+ years",
-      skills: ["Selenium", "Jest", "Cypress", "API Testing"],
-      description: "Ensure quality and reliability of our products through comprehensive testing.",
-      image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
-    },
-    {
-      title: "Marketing Specialist",
-      type: "Part-time",
-      location: "Remote",
-      department: "Marketing",
-      salary: "$40k - $60k",
-      experience: "2+ years",
-      skills: ["SEO", "Content Marketing", "Social Media", "Analytics"],
-      description: "Drive our digital marketing strategy and grow our brand presence.",
-      image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80",
-    },
-  ];
+/* ═══════════════════════════════════════════════════════════
+   CAREERS PAGE COMPONENT
+═══════════════════════════════════════════════════════════ */
+const Careers = () => {
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [formData, setFormData] = useState({ name: "", email: "", position: "", resume: "" });
+  
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const smoothX = useSpring(mouseX, { stiffness: 60, damping: 25 });
+  const smoothY = useSpring(mouseY, { stiffness: 60, damping: 25 });
 
-  const benefits = [
-    {
-      icon: <DollarSign className="w-8 h-8" />,
-      title: "Competitive Salary",
-      desc: "Industry-leading compensation packages with annual raises",
-      color: "from-green-400 to-emerald-500",
-    },
-    {
-      icon: <Clock className="w-8 h-8" />,
-      title: "Flexible Hours",
-      desc: "Work when you're most productive, no strict 9-5",
-      color: "from-blue-400 to-cyan-500",
-    },
-    {
-      icon: <Globe className="w-8 h-8" />,
-      title: "Remote Work",
-      desc: "Work from anywhere in the world with global team",
-      color: "from-purple-400 to-pink-500",
-    },
-    {
-      icon: <Award className="w-8 h-8" />,
-      title: "Career Growth",
-      desc: "Regular promotions and skill development programs",
-      color: "from-yellow-400 to-orange-500",
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: "Great Team",
-      desc: "Collaborative and supportive work environment",
-      color: "from-red-400 to-rose-500",
-    },
-    {
-      icon: <Briefcase className="w-8 h-8" />,
-      title: "Latest Tech",
-      desc: "Work with cutting-edge tools and technologies",
-      color: "from-indigo-400 to-blue-500",
-    },
-  ];
-
-  const perks = [
-    { icon: <Coffee className="w-6 h-6" />, text: "Free snacks & beverages" },
-    { icon: <Heart className="w-6 h-6" />, text: "Health insurance" },
-    { icon: <Zap className="w-6 h-6" />, text: "Gym membership" },
-    { icon: <Target className="w-6 h-6" />, text: "Learning budget" },
-    { icon: <TrendingUp className="w-6 h-6" />, text: "Stock options" },
-    { icon: <Smile className="w-6 h-6" />, text: "Team events" },
-  ];
-
-  const handleInputChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    const handleMove = (e) => { mouseX.set(e.clientX); mouseY.set(e.clientY); };
+    window.addEventListener("mousemove", handleMove, { passive: true });
+    
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(en => { if(en.isIntersecting) en.target.classList.add("active"); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll(".reveal").forEach(el => obs.observe(el));
+    
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, [mouseX, mouseY]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Replace with API call
-    // eslint-disable-next-line no-alert
-    alert("Application submitted successfully! We'll get back to you soon.");
-    setFormData({ name: "", email: "", phone: "", position: "", resume: "", message: "" });
+    alert("Application Received. Our team will contact you soon.");
   };
 
   return (
-    <section className="relative py-24 px-6 overflow-hidden bg-gradient-to-b from-slate-900 via-gray-900 to-black text-white">
-      {/* HOME-LIKE PARALLAX BACKGROUND */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <motion.div className="absolute inset-0" style={{ y: scrollY * 0.5 }}>
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-purple-900/20 to-black/80 z-10" />
-          <img
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&q=80"
-            alt="Team collaboration background"
-            className="w-full h-full object-cover opacity-25"
-          />
-        </motion.div>
+    <div className="bg-[#03040a] text-white selection:bg-violet-500/30 overflow-x-hidden">
+      <style>{`
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        body { cursor: none; }
+        .outline-text { -webkit-text-fill-color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.1); }
+      `}</style>
 
-        <motion.div
-          animate={{ scale: [1, 1.3, 1], rotate: [0, 180, 0], opacity: [0.2, 0.4, 0.2] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{ scale: [1.3, 1, 1.3], rotate: [180, 0, 180], opacity: [0.25, 0.45, 0.25] }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-40 -right-40 w-96 h-96 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-3xl"
+      {/* Optimized Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <ParticleCanvas />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.03)_0%,transparent_70%)]" />
+        <motion.div 
+          className="absolute w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[100px]"
+          style={{ x: smoothX, y: smoothY, left: -250, top: -250 }}
         />
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* HERO */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
-        >
-          <motion.div
-            initial={{ scale: 0.7, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            viewport={{ once: true }}
-            className="inline-block mb-6 px-6 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-md"
-          >
-            <span className="text-blue-400 text-sm md:text-base font-bold uppercase tracking-widest">
-              We&apos;re Hiring
-            </span>
-          </motion.div>
+      <CustomCursor />
 
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
-            Join Our{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
-              Dream Team
+      {/* HERO SECTION */}
+      <section className="relative min-h-[80vh] flex flex-col justify-center pt-32 pb-20 px-6 sm:px-12">
+        <div className="max-w-7xl mx-auto w-full">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+            <span className="text-violet-400 font-mono text-[10px] tracking-[0.5em] uppercase">Talent Acquisition</span>
+          </motion.div>
+          <h1 className="text-[clamp(45px,8vw,110px)] font-black leading-[0.85] tracking-tighter">
+            JOIN THE <br />
+            <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-emerald-400 bg-clip-text text-transparent">
+              DREAM TEAM.
             </span>
           </h1>
+          <div className="mt-12 max-w-2xl">
+            <p className="text-gray-500 font-mono text-[13px] tracking-widest leading-loose reveal">
+              WE ARE ALWAYS LOOKING FOR ARCHITECTS OF THE FUTURE. BUILD YOUR CAREER AT THE INTERSECTION OF DESIGN AND ENGINEERING.
+            </p>
+          </div>
+        </div>
+      </section>
 
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Build the future with passionate innovators. We&apos;re looking for talented individuals
-            <span className="block mt-2 text-blue-400 font-semibold">
-              who want to make a real impact on millions of users worldwide
-            </span>
-          </p>
-
-          {/* Hero Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.35, duration: 0.8 }}
-            viewport={{ once: true }}
-            className="mt-12 relative rounded-3xl overflow-hidden shadow-2xl max-w-5xl mx-auto border border-white/10"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80"
-              alt="Team collaboration"
-              className="w-full h-[400px] object-cover opacity-90"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute bottom-8 left-8 right-8 text-white">
-              <h3 className="text-3xl font-bold mb-2">Where Innovation Meets Passion</h3>
-              <p className="text-lg text-gray-200">
-                Join 100+ talented professionals building tomorrow&apos;s technology
-              </p>
+      {/* STATS (HOME STYLE) */}
+      <section className="py-20 px-6 relative z-10 border-y border-white/5 bg-white/[0.01]">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            {l:"HAPPY TEAM", v:"4.9/5", c:"text-blue-400"},
+            {l:"TALENTS", v:"150+", c:"text-violet-400"},
+            {l:"DIVERSITY", v:"35%", c:"text-pink-400"},
+            {l:"REGIONS", v:"20+", c:"text-emerald-400"},
+          ].map((stat, i) => (
+            <div key={i} className="reveal p-8 text-center group">
+              <div className={`text-4xl font-black mb-1 ${stat.c}`}>{stat.v}</div>
+              <div className="text-[8px] tracking-[0.4em] text-gray-600 font-mono uppercase">{stat.l}</div>
             </div>
-          </motion.div>
-        </motion.div>
+          ))}
+        </div>
+      </section>
 
-        {/* BENEFITS */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="mb-24"
-        >
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Why{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
-                HashirSoft
-              </span>
-              ?
-            </h2>
-            <p className="text-gray-300 text-lg">Amazing benefits that make you love your work</p>
+      {/* BENEFITS (GRID CARDS LIKE SERVICES) */}
+      <section className="py-32 px-6 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="reveal mb-16">
+            <p className="text-violet-400 font-mono text-[9px] tracking-[0.5em] mb-4">PERKS & BENEFITS</p>
+            <h2 className="text-5xl font-black tracking-tighter">WHY TECHAZ.</h2>
           </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {benefits.map((benefit, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -10, scale: 1.02 }}
-                className="group relative bg-gradient-to-b from-white/8 to-white/0 border border-white/12 backdrop-blur-lg p-8 rounded-2xl hover:border-blue-500/40 transition-all duration-300 overflow-hidden"
-              >
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${benefit.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
-                />
-                <div className="relative z-10">
-                  <div
-                    className={`inline-block p-4 rounded-2xl bg-gradient-to-br ${benefit.color} text-white mb-4 group-hover:scale-110 transition-transform`}
-                  >
-                    {benefit.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold mb-3 group-hover:text-blue-400 transition-colors">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-gray-300 leading-relaxed">{benefit.desc}</p>
-                </div>
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-bl-full" />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* PERKS (keep gradient bar, but dark cards) */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="mb-24 p-10 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 rounded-3xl shadow-2xl relative overflow-hidden"
-        >
-          <motion.div
-            animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage:
-                "url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"1\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')",
-              backgroundSize: "30px 30px",
-            }}
-          />
-
-          <div className="relative z-10 text-center mb-8">
-            <h3 className="text-3xl font-bold text-white mb-3">More Amazing Perks</h3>
-            <p className="text-white/90 text-lg">Because we care about your wellbeing</p>
-          </div>
-
-          <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {perks.map((perk, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.6 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.08 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.1, y: -5 }}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center border border-white/20"
-              >
-                <div className="text-white mx-auto mb-3">{perk.icon}</div>
-                <p className="text-sm font-semibold text-white/90">{perk.text}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* OPEN POSITIONS */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="mb-24"
-        >
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Open{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
-                Positions
-              </span>
-            </h2>
-            <p className="text-gray-300 text-lg">Find your perfect role and start your journey</p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-8">
-            {openings.map((job, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.08 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -8, scale: 1.01 }}
-                onClick={() => setSelectedJob(job)}
-                className="group bg-gradient-to-b from-white/8 to-white/0 border border-white/12 backdrop-blur-lg rounded-2xl overflow-hidden hover:border-blue-500/40 transition-all duration-300 cursor-pointer"
-              >
-                {/* Job Image */}
-                <div className="relative h-48 overflow-hidden">
-                  <motion.img
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.6 }}
-                    src={job.image}
-                    alt={job.title}
-                    className="w-full h-full object-cover opacity-90"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute top-4 right-4 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-xs font-bold uppercase text-white border border-white/15">
-                    {job.type}
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-2xl font-bold text-white mb-2">{job.title}</h3>
-                    <div className="flex items-center gap-4 text-white/90 text-sm">
-                      <span className="flex items-center gap-1">
-                        <MapPin size={16} />
-                        {job.location}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <DollarSign size={16} />
-                        {job.salary}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Job Details */}
-                <div className="p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="px-3 py-1 bg-blue-500/10 text-blue-300 border border-blue-500/20 rounded-full text-sm font-semibold">
-                      {job.department}
-                    </span>
-                    <span className="flex items-center gap-1 text-gray-300 text-sm">
-                      <Calendar size={16} />
-                      {job.experience}
-                    </span>
-                  </div>
-
-                  <p className="text-gray-300 mb-4 leading-relaxed">{job.description}</p>
-
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {job.skills.map((skill, i) => (
-                      <span key={i} className="px-3 py-1 bg-white/5 text-gray-100 rounded-lg text-xs font-medium border border-white/10">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold rounded-xl hover:shadow-2xl hover:shadow-blue-600/40 transition-all flex items-center justify-center gap-2"
-                  >
-                    <span>Apply Now</span>
-                    <ArrowRight size={18} />
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* JOB MODAL (optional but matches theme; uses existing selectedJob state) */}
-        <AnimatePresence>
-          {selectedJob && (
-            <motion.div
-              className="fixed inset-0 z-50 flex items-center justify-center px-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedJob(null)}
-            >
-              <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-              <motion.div
-                initial={{ opacity: 0, y: 30, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 30, scale: 0.97 }}
-                transition={{ duration: 0.25 }}
-                className="relative w-full max-w-3xl bg-gradient-to-b from-white/10 to-white/5 border border-white/15 backdrop-blur-xl rounded-3xl overflow-hidden"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="relative h-56">
-                  <img src={selectedJob.image} alt={selectedJob.title} className="w-full h-full object-cover opacity-85" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                  <button
-                    type="button"
-                    onClick={() => setSelectedJob(null)}
-                    className="absolute top-4 right-4 p-2 rounded-xl bg-white/10 border border-white/15 text-white hover:bg-white/15 transition"
-                    aria-label="Close"
-                  >
-                    <X size={18} />
-                  </button>
-                  <div className="absolute bottom-4 left-6 right-6">
-                    <h3 className="text-3xl font-bold text-white">{selectedJob.title}</h3>
-                    <div className="mt-2 flex flex-wrap gap-3 text-white/90 text-sm">
-                      <span className="inline-flex items-center gap-1">
-                        <MapPin size={16} /> {selectedJob.location}
-                      </span>
-                      <span className="inline-flex items-center gap-1">
-                        <DollarSign size={16} /> {selectedJob.salary}
-                      </span>
-                      <span className="inline-flex items-center gap-1">
-                        <Calendar size={16} /> {selectedJob.experience}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="px-3 py-1 bg-blue-500/10 text-blue-300 border border-blue-500/20 rounded-full text-sm font-semibold">
-                      {selectedJob.department}
-                    </span>
-                    <span className="px-3 py-1 bg-white/5 text-gray-100 border border-white/10 rounded-full text-sm font-semibold">
-                      {selectedJob.type}
-                    </span>
-                  </div>
-
-                  <p className="text-gray-200 leading-relaxed mb-5">{selectedJob.description}</p>
-
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {selectedJob.skills.map((skill, i) => (
-                      <span key={i} className="px-3 py-1 bg-white/5 text-gray-100 rounded-lg text-xs font-medium border border-white/10">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-
-                  <a
-                    href="#apply"
-                    onClick={() => setSelectedJob(null)}
-                    className="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-2xl hover:shadow-blue-600/40 transition"
-                  >
-                    Apply for this role <ArrowRight size={18} />
-                  </a>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* COMPANY CULTURE (dark theme) */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="mb-24"
-        >
-          <div className="grid lg:grid-cols-2 gap-12 items-center bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-blue-600/10 border border-white/10 rounded-3xl p-12 backdrop-blur-xl">
-            <div>
-              <h2 className="text-4xl font-bold mb-6">
-                Our{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
-                  Culture
-                </span>
-              </h2>
-              <p className="text-gray-300 mb-6 leading-relaxed text-lg">
-                At <strong className="text-blue-400">HashirSoft</strong>, we believe in creating an environment where creativity flourishes
-                and innovation thrives. We value transparency, collaboration, and continuous learning.
-              </p>
-              <p className="text-gray-300 leading-relaxed text-lg mb-8">
-                Join a team that celebrates diversity, encourages new ideas, and supports your professional growth every step of the way.
-              </p>
-
-              <div className="flex flex-wrap gap-4">
-                {["Innovation First", "Work-Life Balance", "Continuous Learning", "Diversity & Inclusion"].map((value, i) => (
-                  <div key={i} className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full">
-                    <CheckCircle size={18} className="text-green-400" />
-                    <span className="font-semibold text-gray-100">{value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-6">
-              {[
-                { value: "4.9/5", label: "Employee Satisfaction", color: "from-green-400 to-emerald-500" },
-                { value: "150+", label: "Team Members", color: "from-blue-400 to-cyan-500" },
-                { value: "35%", label: "Women in Tech", color: "from-purple-400 to-pink-500" },
-                { value: "20+", label: "Nationalities", color: "from-orange-400 to-red-500" },
-              ].map((stat, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.08 }}
-                  viewport={{ once: true }}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className={`bg-gradient-to-br ${stat.color} p-6 rounded-2xl text-center shadow-xl text-white`}
-                >
-                  <div className="text-4xl font-extrabold mb-2">{stat.value}</div>
-                  <div className="text-white/90 font-medium">{stat.label}</div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* TEAM PHOTOS (dark) */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="mb-24"
-        >
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">
-              Life at{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
-                HashirSoft
-              </span>
-            </h2>
-            <p className="text-gray-300 text-lg">See what makes us special</p>
-          </div>
-
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&q=80",
-              "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&q=80",
-              "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80",
-            ].map((img, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.92 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.15 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.05, y: -10 }}
-                className="relative rounded-2xl overflow-hidden border border-white/10 shadow-xl h-64 group"
-              >
-                <img src={img} alt={`Team ${index + 1}`} className="w-full h-full object-cover opacity-90" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.div>
+            {benefits.map((b, i) => (
+              <div key={i} className="reveal p-10 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-all duration-500 group">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-violet-500/10 text-violet-400 mb-8 border border-violet-500/20 group-hover:scale-110 transition-transform">
+                  {b.icon}
+                </div>
+                <h3 className="text-lg font-bold mb-3 uppercase tracking-tight">{b.title}</h3>
+                <p className="text-gray-500 text-xs leading-relaxed font-mono">{b.desc}</p>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
+      </section>
 
-        {/* APPLICATION FORM (already dark; just keep consistent) */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          id="apply"
-          className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-12 shadow-2xl relative overflow-hidden border border-white/10"
-        >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-0 opacity-5"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 80%, white 1px, transparent 1px)",
-              backgroundSize: "50px 50px",
-            }}
-          />
-
-          <div className="relative z-10 max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Ready to Join Us?</h2>
-              <p className="text-gray-300 text-lg">Fill out the form below and we&apos;ll get back to you within 24 hours</p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-white font-semibold mb-2">Full Name *</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition outline-none backdrop-blur-sm"
-                    placeholder="John Doe"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-white font-semibold mb-2">Email Address *</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition outline-none backdrop-blur-sm"
-                    placeholder="john@example.com"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-white font-semibold mb-2">Phone Number</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition outline-none backdrop-blur-sm"
-                    placeholder="+92 300 1234567"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-white font-semibold mb-2">Position *</label>
-                  <select
-                    name="position"
-                    value={formData.position}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition outline-none backdrop-blur-sm"
-                  >
-                    <option value="" className="bg-gray-800">
-                      Select Position
-                    </option>
-                    {openings.map((job, i) => (
-                      <option key={i} value={job.title} className="bg-gray-800">
-                        {job.title}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-white font-semibold mb-2">Resume/Portfolio Link *</label>
-                <input
-                  type="url"
-                  name="resume"
-                  value={formData.resume}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition outline-none backdrop-blur-sm"
-                  placeholder="https://linkedin.com/in/yourprofile"
-                />
-              </div>
-
-              <div>
-                <label className="block text-white font-semibold mb-2">Why do you want to join us?</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  rows={5}
-                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition outline-none resize-none backdrop-blur-sm"
-                  placeholder="Tell us about yourself and why you're a great fit..."
-                />
-              </div>
-
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold rounded-xl hover:shadow-2xl hover:shadow-blue-600/40 transition-all flex items-center justify-center gap-3 text-lg"
-              >
-                <Send size={20} />
-                <span>Submit Application</span>
-              </motion.button>
-
-              <p className="text-center text-gray-400 text-sm">
-                By submitting this form, you agree to our Terms of Service and Privacy Policy
-              </p>
-            </form>
+      {/* OPEN POSITIONS (PROJECT STYLE) */}
+      <section className="py-32 px-6 relative z-10 bg-white/[0.01]">
+        <div className="max-w-7xl mx-auto">
+          <div className="reveal mb-16 text-center">
+            <h2 className="text-5xl font-black tracking-tighter">OPEN ROLES.</h2>
+            <p className="text-gray-600 font-mono text-[10px] tracking-[0.3em] mt-4 uppercase">Architecting your future starts here</p>
           </div>
-        </motion.div>
-      </div>
-    </section>
+          <div className="grid md:grid-cols-2 gap-8">
+            {openings.map((job, i) => (
+              <div 
+                key={i} 
+                onClick={() => setSelectedJob(job)}
+                className="reveal group cursor-pointer bg-white/[0.02] border border-white/5 rounded-3xl overflow-hidden hover:bg-white/[0.04] transition-all duration-500"
+              >
+                <div className="aspect-video overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
+                  <img src={job.image} alt={job.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                </div>
+                <div className="p-8">
+                  <div className="flex justify-between items-start mb-4">
+                    <h3 className="text-2xl font-black tracking-tighter group-hover:text-violet-400 transition-colors">{job.title}</h3>
+                    <span className="text-[9px] font-mono border border-white/10 px-3 py-1 rounded-full text-gray-400">{job.type}</span>
+                  </div>
+                  <div className="flex gap-6 text-[10px] font-mono text-gray-500 uppercase tracking-widest">
+                    <span className="flex items-center gap-2"><FaMapMarkerAlt /> {job.location}</span>
+                    <span className="flex items-center gap-2"><FaDollarSign /> {job.salary}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* APPLICATION FORM (MINIMALIST) */}
+      <section id="apply" className="py-32 px-6 relative z-10">
+        <div className="max-w-4xl mx-auto bg-white/[0.02] border border-white/5 rounded-[40px] p-12 reveal">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black tracking-tighter mb-4">SEND YOUR PORTFOLIO.</h2>
+            <p className="text-gray-600 font-mono text-[10px] tracking-[0.5em] uppercase">We review every single application</p>
+          </div>
+          <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-8">
+            <input 
+              type="text" placeholder="FULL NAME" required
+              className="bg-transparent border-b border-white/10 py-4 font-mono text-[11px] tracking-widest outline-none focus:border-violet-500 transition-colors"
+            />
+            <input 
+              type="email" placeholder="EMAIL ADDRESS" required
+              className="bg-transparent border-b border-white/10 py-4 font-mono text-[11px] tracking-widest outline-none focus:border-violet-500 transition-colors"
+            />
+            <div className="md:col-span-2">
+              <select className="w-full bg-transparent border-b border-white/10 py-4 font-mono text-[11px] tracking-widest outline-none focus:border-violet-500 transition-colors">
+                <option className="bg-[#03040a]">SELECT POSITION</option>
+                {openings.map(j => <option key={j.title} className="bg-[#03040a]">{j.title.toUpperCase()}</option>)}
+              </select>
+            </div>
+            <input 
+              type="url" placeholder="RESUME / PORTFOLIO LINK" required
+              className="md:col-span-2 bg-transparent border-b border-white/10 py-4 font-mono text-[11px] tracking-widest outline-none focus:border-violet-500 transition-colors"
+            />
+            <div className="md:col-span-2 flex justify-center mt-8">
+              <button type="submit" className="group flex items-center gap-3 bg-white text-black px-12 py-4 rounded-full text-[10px] font-bold tracking-widest hover:bg-violet-500 hover:text-white transition-all duration-300">
+                SUBMIT APPLICATION <Send size={14} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      {/* JOB MODAL (DARK GLASS) */}
+      <AnimatePresence>
+        {selectedJob && (
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[10000] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md"
+            onClick={() => setSelectedJob(null)}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
+              className="max-w-2xl w-full bg-[#03040a] border border-white/10 rounded-[32px] overflow-hidden"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="relative h-64">
+                <img src={selectedJob.image} className="w-full h-full object-cover opacity-50" />
+                <button onClick={() => setSelectedJob(null)} className="absolute top-6 right-6 p-3 bg-white/10 rounded-full hover:bg-white/20 transition-colors">
+                  <X size={20} />
+                </button>
+                <div className="absolute bottom-8 left-8">
+                  <h3 className="text-4xl font-black tracking-tighter">{selectedJob.title}</h3>
+                </div>
+              </div>
+              <div className="p-10">
+                <p className="text-gray-400 font-mono text-[12px] leading-relaxed mb-8">{selectedJob.description}</p>
+                <div className="flex flex-wrap gap-2 mb-10">
+                  {selectedJob.skills.map(s => <span key={s} className="px-3 py-1 bg-white/5 border border-white/10 rounded text-[9px] font-mono text-gray-500 uppercase">{s}</span>)}
+                </div>
+                <a href="#apply" onClick={() => setSelectedJob(null)} className="inline-flex items-center gap-3 bg-violet-500 text-white px-8 py-3 rounded-full text-[10px] font-bold tracking-widest hover:bg-violet-600 transition-all">
+                  APPLY FOR THIS ROLE <FaArrowRight />
+                </a>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <footer className="py-12 border-t border-white/5 text-center text-[9px] font-mono tracking-[0.5em] text-gray-700 uppercase">
+        © {new Date().getFullYear()} TECHAZ SOLUTIONS. ALL RIGHTS RESERVED.
+      </footer>
+    </div>
   );
 };
+
+/* ═══════════════════════════════════════════════════════════
+   DATA CONSTANTS
+═══════════════════════════════════════════════════════════ */
+const benefits = [
+  { icon: <Zap size={20} />, title: "Competitive Salary", desc: "Industry-leading compensation packages with annual merit-based raises." },
+  { icon: <Clock size={20} />, title: "Flexible Hours", desc: "Results-driven culture where you own your time and schedule." },
+  { icon: <Globe size={20} />, title: "Remote Work", desc: "Global-first collaboration with the freedom to work from anywhere." },
+  { icon: <Award size={20} />, title: "Career Growth", desc: "Structured mentorship and clear pathways to leadership roles." },
+  { icon: <Users size={20} />, title: "Great Team", desc: "A supportive ecosystem of top-tier talent and creative minds." },
+  { icon: <Briefcase size={20} />, title: "Latest Tech", desc: "Access to the most advanced tools and high-end hardware." },
+];
+
+const openings = [
+  {
+    title: "Senior React Developer",
+    type: "Full-time",
+    location: "Remote",
+    salary: "$80k - $120k",
+    skills: ["React", "TypeScript", "Node.js", "AWS"],
+    description: "We are seeking a senior architect to lead the engineering of high-performance React ecosystems.",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
+  },
+  {
+    title: "UI/UX Designer",
+    type: "Full-time",
+    location: "Karachi, PK",
+    salary: "$60k - $90k",
+    skills: ["Figma", "Adobe XD", "User Research"],
+    description: "Shape the visual future of our global clients by creating intuitive, stunning interfaces.",
+    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
+  },
+  {
+    title: "DevOps Engineer",
+    type: "Contract",
+    location: "Remote",
+    salary: "$90k - $130k",
+    skills: ["Kubernetes", "Docker", "CI/CD", "AWS"],
+    description: "Automate and scale the infrastructure that powers our most ambitious digital products.",
+    image: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=800&q=80",
+  },
+  {
+    title: "Project Manager",
+    type: "Full-time",
+    location: "Lahore, PK",
+    salary: "$70k - $100k",
+    skills: ["Agile", "Scrum", "Team Leadership"],
+    description: "Bridge the gap between vision and execution for enterprise-level software delivery.",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80",
+  },
+];
 
 export default Careers;
