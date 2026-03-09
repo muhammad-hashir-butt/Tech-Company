@@ -76,7 +76,6 @@ const ParticleCanvas = () => {
 ═══════════════════════════════════════════════════════════ */
 const Careers = () => {
   const [selectedJob, setSelectedJob] = useState(null);
-  const [formData, setFormData] = useState({ name: "", email: "", position: "", resume: "" });
   
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -141,7 +140,7 @@ const Careers = () => {
         </div>
       </section>
 
-      {/* STATS (HOME STYLE) */}
+      {/* STATS */}
       <section className="py-20 px-6 relative z-10 border-y border-white/5 bg-white/[0.01]">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
@@ -158,7 +157,7 @@ const Careers = () => {
         </div>
       </section>
 
-      {/* BENEFITS (GRID CARDS LIKE SERVICES) */}
+      {/* BENEFITS */}
       <section className="py-32 px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="reveal mb-16">
@@ -179,7 +178,7 @@ const Careers = () => {
         </div>
       </section>
 
-      {/* OPEN POSITIONS (PROJECT STYLE) */}
+      {/* OPEN POSITIONS */}
       <section className="py-32 px-6 relative z-10 bg-white/[0.01]">
         <div className="max-w-7xl mx-auto">
           <div className="reveal mb-16 text-center">
@@ -193,7 +192,7 @@ const Careers = () => {
                 onClick={() => setSelectedJob(job)}
                 className="reveal group cursor-pointer bg-white/[0.02] border border-white/5 rounded-3xl overflow-hidden hover:bg-white/[0.04] transition-all duration-500"
               >
-                <div className="aspect-video overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700">
+                <div className="aspect-video overflow-hidden transition-all duration-700">
                   <img src={job.image} alt={job.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                 </div>
                 <div className="p-8">
@@ -212,7 +211,7 @@ const Careers = () => {
         </div>
       </section>
 
-      {/* APPLICATION FORM (MINIMALIST) */}
+      {/* APPLICATION FORM */}
       <section id="apply" className="py-32 px-6 relative z-10">
         <div className="max-w-4xl mx-auto bg-white/[0.02] border border-white/5 rounded-[40px] p-12 reveal">
           <div className="text-center mb-16">
@@ -247,7 +246,7 @@ const Careers = () => {
         </div>
       </section>
 
-      {/* JOB MODAL (DARK GLASS) */}
+      {/* JOB MODAL */}
       <AnimatePresence>
         {selectedJob && (
           <motion.div 
@@ -261,7 +260,7 @@ const Careers = () => {
               onClick={e => e.stopPropagation()}
             >
               <div className="relative h-64">
-                <img src={selectedJob.image} className="w-full h-full object-cover opacity-50" />
+                <img src={selectedJob.image} className="w-full h-full object-cover" />
                 <button onClick={() => setSelectedJob(null)} className="absolute top-6 right-6 p-3 bg-white/10 rounded-full hover:bg-white/20 transition-colors">
                   <X size={20} />
                 </button>

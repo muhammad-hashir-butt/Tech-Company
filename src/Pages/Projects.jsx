@@ -1,13 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
-import {
-  FaArrowRight, FaCheckCircle, FaProjectDiagram, FaSmile, FaGlobe, FaStar
-} from "react-icons/fa";
-import { Zap, Layout, Smartphone, Palette, ChevronRight } from "lucide-react";
+import { FaArrowRight } from "react-icons/fa";
 
 /* ═══════════════════════════════════════════════════════════
-   OPTIMIZED BACKGROUND & CURSOR (CONSISTENT)
+   CUSTOM CURSOR
 ═══════════════════════════════════════════════════════════ */
 const CustomCursor = () => {
   const cx = useMotionValue(-100);
@@ -41,6 +38,9 @@ const CustomCursor = () => {
   );
 };
 
+/* ═══════════════════════════════════════════════════════════
+   PARTICLE BACKGROUND
+═══════════════════════════════════════════════════════════ */
 const ParticleCanvas = () => {
   const canvasRef = useRef(null);
   useEffect(() => {
@@ -72,7 +72,7 @@ const ParticleCanvas = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   MAIN PROJECTS COMPONENT
+   PROJECTS COMPONENT
 ═══════════════════════════════════════════════════════════ */
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState("all");
@@ -106,10 +106,8 @@ const Projects = () => {
         .outline-text { -webkit-text-fill-color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.1); }
       `}</style>
 
-      {/* Optimized Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <ParticleCanvas />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.03)_0%,transparent_70%)]" />
         <motion.div 
           className="absolute w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[100px]"
           style={{ x: smoothX, y: smoothY, left: -250, top: -250 }}
@@ -118,7 +116,7 @@ const Projects = () => {
 
       <CustomCursor />
 
-      {/* HERO SECTION */}
+      {/* HERO */}
       <section className="relative min-h-[70vh] flex flex-col justify-center pt-32 pb-20 px-6 sm:px-12">
         <div className="max-w-7xl mx-auto w-full">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
@@ -131,7 +129,6 @@ const Projects = () => {
             </span>
           </h1>
           
-          {/* FILTERS (MINIMALIST) */}
           <div className="mt-16 flex flex-wrap gap-8 border-b border-white/5 pb-6 reveal">
             {["all", "web", "mobile", "design"].map((f) => (
               <button
@@ -170,19 +167,8 @@ const Projects = () => {
                     <img 
                       src={p.image} 
                       alt={p.title} 
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#03040a] via-transparent to-transparent opacity-60" />
-                    
-                    {/* STATS OVERLAY */}
-                    <div className="absolute bottom-6 left-6 right-6 flex gap-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                      {Object.entries(p.stats).map(([k, v]) => (
-                        <div key={k} className="flex-1 bg-black/40 backdrop-blur-md rounded-xl p-3 border border-white/10 text-center">
-                          <div className="text-[10px] text-violet-400 font-bold mb-1 uppercase tracking-tighter">{v}</div>
-                          <div className="text-[7px] text-gray-400 uppercase font-mono tracking-widest">{k}</div>
-                        </div>
-                      ))}
-                    </div>
                   </div>
 
                   <div className="reveal">
@@ -207,7 +193,7 @@ const Projects = () => {
         </div>
       </section>
 
-      {/* STATS GRID (HOME STYLE) */}
+      {/* STATS */}
       <section className="py-32 px-6 relative z-10 border-y border-white/5 bg-white/[0.01]">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
@@ -224,7 +210,7 @@ const Projects = () => {
         </div>
       </section>
 
-      {/* CTA SECTION */}
+      {/* CTA */}
       <section className="py-32 px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center reveal">
           <h2 className="text-[clamp(30px,6vw,60px)] font-black tracking-tighter mb-10 leading-none">
@@ -247,54 +233,12 @@ const Projects = () => {
    PROJECT DATA
 ═══════════════════════════════════════════════════════════ */
 const projectsData = [
-  {
-    category: "web",
-    title: "E-Commerce Architecture",
-    client: "FashionHub",
-    tech: ["React", "Node.js", "MongoDB", "Stripe"],
-    image: "https://images.unsplash.com/photo-1661956602116-aa6865609028?w=800&q=80",
-    stats: { revenue: "+250%", users: "50K+" },
-  },
-  {
-    category: "mobile",
-    title: "AI Fitness Companion",
-    client: "FitLife",
-    tech: ["React Native", "Firebase", "TensorFlow"],
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80",
-    stats: { downloads: "100K+", rating: "4.8★" },
-  },
-  {
-    category: "web",
-    title: "Enterprise Ecosystem",
-    client: "SalesPro",
-    tech: ["Next.js", "PostgreSQL", "GraphQL"],
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
-    stats: { efficiency: "+180%", clients: "200+" },
-  },
-  {
-    category: "design",
-    title: "Neo-Banking Interface",
-    client: "TrustBank",
-    tech: ["Figma", "Adobe XD", "Protopie"],
-    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80",
-    stats: { satisfaction: "95%", load_time: "-40%" },
-  },
-  {
-    category: "mobile",
-    title: "Logistics Grid",
-    client: "QuickBite",
-    tech: ["Flutter", "Node.js", "Socket.io"],
-    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80",
-    stats: { orders: "500K+", speed: "25min" },
-  },
-  {
-    category: "web",
-    title: "LMS Infrastructure",
-    client: "EduTech Inc",
-    tech: ["Vue.js", "Laravel", "WebRTC"],
-    image: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800&q=80",
-    stats: { students: "75K+", finish_rate: "89%" },
-  },
+  { category: "web", title: "E-Commerce Architecture", client: "FashionHub", tech: ["React","Node.js","MongoDB","Stripe"], image: "https://images.unsplash.com/photo-1661956602116-aa6865609028?w=800&q=80", stats: { revenue: "+250%", users: "50K+" } },
+  { category: "mobile", title: "AI Fitness Companion", client: "FitLife", tech: ["React Native","Firebase","TensorFlow"], image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80", stats: { downloads: "100K+", rating: "4.8★" } },
+  { category: "web", title: "Enterprise Ecosystem", client: "SalesPro", tech: ["Next.js","PostgreSQL","GraphQL"], image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80", stats: { efficiency: "+180%", clients: "200+" } },
+  { category: "design", title: "Neo-Banking Interface", client: "TrustBank", tech: ["Figma","Adobe XD","Protopie"], image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80", stats: { satisfaction: "95%", load_time: "-40%" } },
+  { category: "mobile", title: "Logistics Grid", client: "QuickBite", tech: ["Flutter","Node.js","Socket.io"], image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80", stats: { orders: "500K+", speed: "25min" } },
+  { category: "web", title: "LMS Infrastructure", client: "EduTech Inc", tech: ["Vue.js","Laravel","WebRTC"], image: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800&q=80", stats: { students: "75K+", finish_rate: "89%" } },
 ];
 
 export default Projects;
